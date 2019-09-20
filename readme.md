@@ -31,8 +31,11 @@ module.exports = {
 
 #### 升级问题
 webpack-bundel-analyzer 3.3.2版本容易受 css 攻击
+
 webpack-dev-server 3.1.11之前的版本，因为 HMR 需要使用 WebSocket，但 WebSocket 不检查请求来源可能导致攻击者窃取代码
+
 webpack 升级到4
+
     ```
     TypeError: Cannot find module 'webpack/bin/config-yargs'
     ```
