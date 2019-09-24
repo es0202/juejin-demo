@@ -17,6 +17,10 @@ module.exports = {
         },
         target: 'http://web-api.juejin.im/',
         changeOrigin: true //跨域必须
+      },
+      '/v1/':{
+        target:'http://gold-tag-ms.juejin.im/',
+        changeOrigin: true //跨域必须
       }
     },
 

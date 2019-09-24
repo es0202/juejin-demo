@@ -1,7 +1,7 @@
 #### config/http.js文件内容如下：
 ```
 module.exports = {
-  header: {
+ header: {
     headers: {
       'X-Agent': 'Juejin/Web',
       'X-Legacy-Device-Id': '',
@@ -10,20 +10,36 @@ module.exports = {
       'Content-Type': 'application/json'
     }
   },
-  param: {
-    operationName: '',
-    query: '',
-    variables: {
-      first: 20,
-      after: '',
-      order: 'POPULAR'
-    },
-    extensions: {
-      query: {
-        id: ''
+  header1: {
+    headers: {
+      'X-Juejin-Client': '',
+      'X-Juejin-Src': 'web',
+      'X-Juejin-Token': '',
+      'X-Juejin-Uid': ''
+    }
+  },
+  param_common: {
+    'operationName': '',
+    'query': '',
+    'extensions': {
+      'query': {
+        'id': ''
       }
     }
   },
+  param_articles: {
+    'variables': {
+      'first': 20, //一次性20条数据
+      'after': '',
+      'order': 'POPULAR'
+    }
+  },
+  param_authors: {
+    'variables': {
+      'limit': 10,
+      'excluded': []
+    },
+  }
 }
 ```
 本项目跨域调用掘金的接口
@@ -60,6 +76,6 @@ webpack 升级到4
   ```
   Cannot assign to read only property 'exports' of object '#<Object>' at Module../node_modules/webpack-dev-server/client/clients/BaseClient.js
   ```
-  ##### 不允许在 js 中混用 module.exports 和 import ，webpack 配置的 babel-loader 模块移除条件 resolve('node_modules/webpack-dev-server/client')]
+  ##### 不允许在 js 中混用 module.exports 和 import ，webpack 配置的 babel-loader 模块移除条件 resolve('node_modules/webpack-dev-server/client')
 
 

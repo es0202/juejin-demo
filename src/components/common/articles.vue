@@ -68,7 +68,7 @@ export default {
   methods: {
     async initData() {
       let res = await axios.post(
-        '/api/query',config.param,config.header
+        '/api/query',this.lodash.merge(config.param_articles,config.param_common),config.header
       );
       if (res.data.data.articleFeed && res.data.data.articleFeed.items && res.data.data.articleFeed.items.edges) {
         this.articles = res.data.data.articleFeed.items.edges;

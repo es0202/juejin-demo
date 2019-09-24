@@ -1,35 +1,8 @@
 <template>
   <div class="tag-wrap">
     <ul class="nav-list">
-      <li class="nav-item">
-        <a href>推荐</a>
-      </li>
-      <li class="nav-item">
-        <a href>关注</a>
-      </li>
-      <li class="nav-item">
-        <a href>后端</a>
-      </li>
-      <li class="nav-item">
-        <a href>前端</a>
-      </li>
-      <li class="nav-item">
-        <a href>Android</a>
-      </li>
-      <li class="nav-item">
-        <a href>iOS</a>
-      </li>
-      <li class="nav-item">
-        <a href>人工智能</a>
-      </li>
-      <li class="nav-item">
-        <a href>开发工具</a>
-      </li>
-      <li class="nav-item">
-        <a href>代码人生</a>
-      </li>
-      <li class="nav-item">
-        <a href>阅读</a>
+      <li v-for="item in tags" class="nav-item">
+        <a href>{{item.name}}</a>
       </li>
       <li class="nav-item right">
         <a href>标签管理</a>
@@ -37,7 +10,27 @@
     </ul>
   </div>
 </template>
-
+<script>
+import config from '../../../config/http';
+export default {
+  data() {
+    return {
+      tags: []
+    };
+  },
+  mounted() {
+    this.initData();
+  },
+  methods: {
+    async initData() {
+      let res = await axios.get('/v1/categories', config.header1);
+      if (res.data.s == 1 && res.data.d.categoryList) {
+        this.tags = res.data.d.categoryList;
+      }
+    }
+  }
+};
+</script>
 <style lang="less" scoped>
 .tag-wrap {
   z-index: 300;
