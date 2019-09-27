@@ -10,6 +10,12 @@ export default new Router({
       path: '/',
       name: 'home',
       component: home
+    },
+    //根目录不应该有query
+    {
+      path:'/home',
+      name:'home',
+      component:home
     }
   ]
 })
