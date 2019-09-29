@@ -2,8 +2,7 @@
   <div class="main-wrap">
     <tag></tag>
     <div class="container">
-
-        <articles></articles>
+      <articles></articles>
       <div class="aside">
         <authors></authors>
       </div>
@@ -16,6 +15,21 @@ import articles from '../common/articles';
 import authors from '../common/authors';
 export default {
   name: 'App',
+  mounted() {
+    let beforeScroll = window.scrollY;
+    window.addEventListener('scroll', function() {
+      let afterScroll = window.scrollY;
+      if (window.scrollY > 150 && afterScroll - beforeScroll > 150) {
+        beforeScroll = afterScroll;
+        document.getElementsByClassName('header-wrap')[0].firstChild.className = 'container hide';
+        document.getElementsByClassName('tag-wrap')[0].className = 'tag-wrap top';
+      } else if (beforeScroll - afterScroll > 100) {
+        beforeScroll = afterScroll;
+        document.getElementsByClassName('header-wrap')[0].firstChild.className = 'container';
+        document.getElementsByClassName('tag-wrap')[0].className = 'tag-wrap';
+      }
+    });
+  },
   components: {
     tag,
     articles,

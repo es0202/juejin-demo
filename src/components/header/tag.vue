@@ -33,12 +33,17 @@ export default {
 </script>
 <style lang="less" scoped>
 .tag-wrap {
-  z-index: 300;
+  z-index: 100;
   position: fixed;
   top: 60px;
   width: 100%;
   border-bottom: 1px solid #f1f1f1;
   background: #fff;
+  transition: all .2s;
+  transform: translateZ(0);
+  &.top {
+    transform: translate3d(0, -60px, 0);
+  }
   .nav-list {
     max-width: 960px;
     margin: auto;

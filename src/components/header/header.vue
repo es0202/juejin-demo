@@ -80,17 +80,22 @@ export default {
   z-index: 200;
   width: 100%;
   border-bottom: 1px solid #f1f1f1;
-  background: #fff;//随滚动上移，不能覆盖住滚动层
+  background: #fff; //随滚动上移，不能覆盖住滚动层
   position: relative;
   height: 60px;
   .container {
+    transition: all 0.2s;
+    transform: translateZ(0);//过渡效果使用
     width: 100%;
-    background: #fff;//fixed元素占宽100%有背景才可盖住滚动层
+    background: #fff; //fixed元素占宽100%有背景才可盖住滚动层
     height: 60px;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    &.hide {
+      transform: translate3d(0, -100%, 0);
+    }
     .fix-wrap {
       max-width: 960px;
       margin: 0 auto;
