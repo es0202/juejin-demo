@@ -20,13 +20,16 @@ export default {
     window.addEventListener('scroll', function() {
       let afterScroll = window.scrollY;
       if (window.scrollY > 150 && afterScroll - beforeScroll > 150) {
+        //下滚
         beforeScroll = afterScroll;
         document.getElementsByClassName('header-wrap')[0].firstChild.className = 'container hide';
         document.getElementsByClassName('tag-wrap')[0].className = 'tag-wrap top';
+        document.getElementsByClassName('sticky-block')[0].className = 'sticky-block top';
       } else if (beforeScroll - afterScroll > 100) {
         beforeScroll = afterScroll;
         document.getElementsByClassName('header-wrap')[0].firstChild.className = 'container';
         document.getElementsByClassName('tag-wrap')[0].className = 'tag-wrap';
+        document.getElementsByClassName('sticky-block')[0].className = 'sticky-block';
       }
     });
   },
@@ -55,7 +58,7 @@ export default {
         background: #fff;
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         border-radius: 2px;
-        padding-bottom: 16px;
+        margin-bottom: 16px;
       }
     }
   }

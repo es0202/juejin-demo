@@ -81,14 +81,28 @@ export default {
         ['最新', ['NEWEST']],
         ['热榜', ['THREE_DAYS_HOTTEST', 'WEEKLY_HOTTEST', 'MONTHLY_HOTTEST', 'HOTTEST']]
       ],
-      selected: '' //el-select双向绑定值
+      selected: '', //el-select双向绑定值
+      hasNextPage: '',
+      endCursor: '',
+      loadMore: false//防止持续请求数据
     };
   },
   mounted() {
+    const that = this;
     this.initData();
+    window.addEventListener('scroll', () => {
+      if (window.scrollY + document.documentElement.clientHeight + 300 > document.documentElement.scrollHeight) {
+        if (that.loadMore) {
+          that.initData('true');
+        }
+      } else {
+        that.loadMore = true;
+      }
+    });
   },
   methods: {
-    async initData() {
+    async initData(isAppend) {
+      this.loadMore = false;
       let article_type;
       if (this.$route.query.sort) {
         article_type = {
@@ -103,13 +117,23 @@ export default {
           }
         };
       }
+      if (isAppend && this.hasNextPage) {
+        article_type.variables.after = this.endCursor;
+      }
       let res = await axios.post(
         '/api/query',
         this.lodash.merge({}, config.param_articles, article_type, config.param_common),
         config.header
       );
       if (res.data.data.articleFeed && res.data.data.articleFeed.items && res.data.data.articleFeed.items.edges) {
-        this.articles = res.data.data.articleFeed.items.edges;
+        if (isAppend && this.hasNextPage) {
+          //push可触发数组更新检测
+          this.articles.push(...res.data.data.articleFeed.items.edges);
+        } else {
+          this.articles = res.data.data.articleFeed.items.edges;
+        }
+        this.hasNextPage = res.data.data.articleFeed.items.pageInfo.hasNextPage;
+        this.endCursor = res.data.data.articleFeed.items.pageInfo.endCursor;
       }
     },
     calDate(date) {
@@ -153,10 +177,10 @@ export default {
       });
     }
   },
-  watch:{
-    '$route'(to,from){
+  watch: {
+    $route(to, from) {
       //监听路由改变
-      this.initData()
+      this.initData();
     }
   }
 };
@@ -174,8 +198,9 @@ export default {
       align-items: center;
       .list-item {
         font-size: 14px;
-        line-height: 14px;
-        padding: 0 14px;
+        line-height: 18px;
+        height: 18px;
+        padding: 0 12px;
         color: #909090;
         border-right: 1px solid hsla(0, 0%, 59.2%, 0.2);
         display: flex;
@@ -195,7 +220,7 @@ export default {
             .el-input__inner {
               //elementUI box-sizing:border-box
               width: 72px;
-              height: 20px;
+              height: 18px;
               padding: 2px 10px;
               font-size: 12px;
               line-height: 12px;
