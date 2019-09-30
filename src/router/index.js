@@ -1,21 +1,29 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import home from '@/components/page/home'
+import articles from '@/components/common/articles'
+import followArticle from '@/components/common/followArticle'
 
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  mode: 'history',
+  routes: [{
       path: '/',
-      name: 'home',
-      component: home
+      redirect: 'home',
+      component: articles
     },
-    //根目录不应该有query
+    //根目录不应该有query param
     {
-      path:'/home',
-      name:'home',
-      component:home
+      path: '/home',
+      component: articles,
+    },
+    {
+      path: '/home/recommend',
+      component: articles
+    },
+    {
+      path: '/home/follow',
+      component: followArticle
     }
   ]
 })

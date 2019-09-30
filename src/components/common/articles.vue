@@ -4,7 +4,7 @@
       <ul class="list-header">
         <!--路由query切换article类型-->
         <li :class="type[1].indexOf($route.query.sort)>-1 ? 'list-item active' : 'list-item'" v-for="(type,index) in types" :key="index">
-          <router-link :to="{path:'/home',query:{sort: type[1][0]}}" @click.native="addActive">{{type[0]}}</router-link>
+          <router-link :to="{path:$route.path,query:{sort: type[1][0]}}" @click.native="addActive">{{type[0]}}</router-link>
           <el-select @change="changeType" v-model="selected" class="el-page" value="THREE_DAYS_HOTTEST" placeholder="3天内" v-if="index==2">
             <el-option value="THREE_DAYS_HOTTEST" label="3天内"></el-option>
             <el-option value="WEEKLY_HOTTEST" label="7天内"></el-option>
@@ -77,14 +77,14 @@ export default {
       articles: [],
       date: new Date(),
       types: [
-        ['热门', ['POPULAR']],
+        ['热门', [undefined, 'POPULAR']], //没有query param显示热门
         ['最新', ['NEWEST']],
         ['热榜', ['THREE_DAYS_HOTTEST', 'WEEKLY_HOTTEST', 'MONTHLY_HOTTEST', 'HOTTEST']]
       ],
       selected: '', //el-select双向绑定值
       hasNextPage: '',
       endCursor: '',
-      loadMore: false//防止持续请求数据
+      loadMore: false //防止持续请求数据
     };
   },
   mounted() {
@@ -122,7 +122,7 @@ export default {
       }
       let res = await axios.post(
         '/api/query',
-        this.lodash.merge({}, config.param_articles, article_type, config.param_common),
+        this.lodash.merge({}, config.param_recommend, article_type, config.param_common),
         config.header
       );
       if (res.data.data.articleFeed && res.data.data.articleFeed.items && res.data.data.articleFeed.items.edges) {
@@ -313,23 +313,4 @@ export default {
     }
   }
 }
-</style>
-<!--elementUI样式是全局引入的，scoped-->
-// <style lang="less">
-// .el-input {
-//   font-size: 12px;
-
-//   .el-input__inner {
-//     width: 72px;
-//     height: 14px;
-//     padding: 2px 10px;
-//     font-size: 12px;
-//     line-height: 14px;
-//   }
-//   .el-input__icon {
-//     line-height: 14px;
-//     width: 14px;
-//   }
-// }
-//
 </style>

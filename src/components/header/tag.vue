@@ -2,7 +2,7 @@
   <div class="tag-wrap">
     <ul class="nav-list">
       <li v-for="item in tags" class="nav-item">
-        <a href>{{item.name}}</a>
+        <a :href="'/home/'+item.title">{{item.name}}</a>
       </li>
       <li class="nav-item right">
         <a href>标签管理</a>
@@ -15,7 +15,7 @@ import config from '../../../config/http';
 export default {
   data() {
     return {
-      tags: []
+      tags: [{ name: '推荐', title: 'recommend' }, { name: '关注', title: 'follow' }]
     };
   },
   mounted() {
@@ -25,7 +25,7 @@ export default {
     async initData() {
       let res = await axios.get('/v1/categories', config.header1);
       if (res.data.s == 1 && res.data.d.categoryList) {
-        this.tags = res.data.d.categoryList;
+        this.tags.push(...res.data.d.categoryList);
       }
     }
   }
@@ -36,10 +36,11 @@ export default {
   z-index: 100;
   position: fixed;
   top: 60px;
+  left: 0;
   width: 100%;
   border-bottom: 1px solid #f1f1f1;
   background: #fff;
-  transition: all .2s;
+  transition: all 0.2s;
   transform: translateZ(0);
   &.top {
     transform: translate3d(0, -60px, 0);

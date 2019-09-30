@@ -20,18 +20,26 @@ module.exports = {
   },
   param_common: {
     'operationName': '',
-    'query': '',
+    'query': ''
+  },
+  param_recommend: {
+    'variables': {
+      'first': 20, //一次性20条数据
+    },
     'extensions': {
       'query': {
-        'id': ''
+        'id': '' //推荐标签请求文章id未知来源，其他标签请求文章id来源于v1/categories接口返回
       }
     }
   },
-  param_articles: {
+  param_articles_popular: {
     'variables': {
-      'first': 20, //一次性20条数据
-      'after': '',
       'order': 'POPULAR'
+    }
+  },
+  param_articles_new: {
+    'variables': {
+      'order': 'NEWEST'
     }
   },
   param_authors: {
@@ -39,6 +47,11 @@ module.exports = {
       'limit': 10,
       'excluded': []
     },
+    'extensions': {
+      'query': {
+        'id': ''//请求作者榜id未知来源
+      }
+    }
   }
 }
 ```
@@ -79,3 +92,4 @@ webpack 升级到4
   ##### 不允许在 js 中混用 module.exports 和 import ，webpack 配置的 babel-loader 模块移除条件 resolve('node_modules/webpack-dev-server/client')
 
 
+### TODO 公用组件不应该刷新啊
