@@ -11,15 +11,14 @@
 </template>
 
 <script>
-
 import tag from '../header/tag';
 import authors from '../common/authors';
-export default{
+export default {
   components: {
     tag,
-    authors,
+    authors
   }
-}
+};
 </script>
 <style lang="less" scoped>
 .main-wrap {

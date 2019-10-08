@@ -122,7 +122,7 @@ export default {
           background-repeat: no-repeat;
           background-size: cover;
           margin-right: 10px;
-          flex: 0 0 auto; //
+          flex: 0 0 auto; //不分配多余空间
           border-radius: 50%;
         }
         .author-info {
