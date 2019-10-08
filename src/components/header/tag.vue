@@ -1,8 +1,16 @@
 <template>
   <div class="tag-wrap">
     <ul class="nav-list">
-      <li v-for="item in tags" class="nav-item">
-        <a :href="'/home/'+item.title">{{item.name}}</a>
+      <li
+        v-for="(item,index) in tags"
+        :key="index"
+        :class="$route.path.split('/home/')[1] ?
+          $route.path.split('/home/')[1]==item.title?'nav-item active':'nav-item'
+          : index==0?'nav-item active':'nav-item'"
+      >
+        <!-- <a :href="'/home/'+item.title">{{item.name}}</a> -->
+        <!-- a标签切换路径不能复用其他组件 -->
+        <router-link :to="'/home/'+item.title">{{item.name}}</router-link>
       </li>
       <li class="nav-item right">
         <a href>标签管理</a>
@@ -62,6 +70,9 @@ export default {
       &:last-child {
         position: absolute;
         right: 0;
+      }
+      &.active {
+        color: #007fff;
       }
     }
   }

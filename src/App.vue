@@ -1,15 +1,7 @@
 <template>
   <div id="app">
     <headers></headers>
-    <div class="main-wrap">
-      <tag></tag>
-      <div class="container">
-        <router-view></router-view>
-        <div class="aside">
-          <authors></authors>
-        </div>
-      </div>
-    </div>
+    <router-view></router-view>
     <svg-icon></svg-icon>
   </div>
 </template>
@@ -17,8 +9,6 @@
 <script>
 import headers from './components/header/header';
 import svgIcon from './components/common/svg';
-import tag from './components/header/tag';
-import authors from './components/common/authors';
 export default {
   name: 'App',
   mounted() {
@@ -40,8 +30,6 @@ export default {
     });
   },
   components: {
-    tag,
-    authors,
     headers,
     svgIcon
   }
@@ -50,28 +38,4 @@ export default {
 
 <style lang='less'>
 @import '../static/css/reset.less';
-</style>
-<style lang="less" scoped>
-.main-wrap {
-  padding-top: 60px;
-  width: 100%;
-  background-color: #f4f5f5;
-  .container {
-    max-width: 960px;
-    margin: 0 auto;
-    position: relative;
-    .aside {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 240px;
-      [class$='-wrap'] {
-        background: #fff;
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        border-radius: 2px;
-        margin-bottom: 16px;
-      }
-    }
-  }
-}
 </style>

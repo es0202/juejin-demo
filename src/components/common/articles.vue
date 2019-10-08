@@ -135,6 +135,9 @@ export default {
         this.hasNextPage = res.data.data.articleFeed.items.pageInfo.hasNextPage;
         this.endCursor = res.data.data.articleFeed.items.pageInfo.endCursor;
       }
+      else{
+        //200 return error message
+      }
     },
     calDate(date) {
       let _date = new Date(date);

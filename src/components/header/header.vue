@@ -52,11 +52,11 @@
   </div>
 </template>
 <script>
-export default {
-  data() {
-    return;
-  }
-};
+// export default {
+//   data() {
+//     return{};
+//   },
+// };
 </script>
 <style lang="less" scoped>
 .wh(@width,@height) {
@@ -85,7 +85,7 @@ export default {
   height: 60px;
   .container {
     transition: all 0.2s;
-    transform: translateZ(0);//过渡效果使用
+    transform: translateZ(0); //过渡效果使用
     width: 100%;
     background: #fff; //fixed元素占宽100%有背景才可盖住滚动层
     height: 60px;
