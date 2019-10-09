@@ -25,7 +25,30 @@
             <span class="type" v-if="item.node.targets['0'].type=='article'">分享</span>
             <h3>{{item.node.targets['0'].title}}</h3>
           </div>
+          <div
+            class="article-content"
+          >{{item.node.targets['0'].content.slice(0,-54)?item.node.targets['0'].content.slice(0,-54)+'...':item.node.targets['0'].content}}</div>
         </router-link>
+        <div class="action-box">
+          <div class="action">
+            <svg class="like-icon">
+              <use xlink:href="#like2" />
+            </svg>
+            <span>{{item.node.targets[0].likeCount}}</span>
+          </div>
+          <div class="action">
+            <svg class="like-icon">
+              <use xlink:href="#comment2" />
+            </svg>
+            <span>{{item.node.targets[0].commentsCount}}</span>
+          </div>
+          <div class="action">
+            <svg class="like-icon">
+              <use xlink:href="#share" />
+            </svg>
+            <span>分享</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -38,17 +61,38 @@ export default {
       followArticles: [],
       hasNextPage: '',
       endCursor: '',
-      date: new Date()
+      date: new Date(),
+      loadMore: false //防止持续请求数据
     };
   },
   mounted() {
+    const that = this;
     this.initData();
+    window.addEventListener('scroll', () => {
+      if (window.scrollY + document.documentElement.clientHeight + 300 > document.documentElement.scrollHeight) {
+        if (that.loadMore) {
+          that.initData('true');
+        }
+      } else {
+        that.loadMore = true;
+      }
+    });
   },
   methods: {
-    async initData() {
-      let res = await axios.post('/api/query', this.lodash.merge({}, config.param_follow, config.param_common), config.header);
+    async initData(isAppend) {
+      this.loadMore = false;
+      let param_follow = config.param_follow;
+      if (isAppend && this.hasNextPage) {
+        param_follow.variables.after = this.endCursor;
+      }
+      let res = await axios.post('/api/query', this.lodash.merge({}, param_follow, config.param_common), config.header);
       if (res.data.data.followingArticleFeed && res.data.data.followingArticleFeed.items) {
-        this.followArticles = res.data.data.followingArticleFeed.items.edges;
+        if (isAppend && this.hasNextPage) {
+          //push可触发数组更新检测
+          this.followArticles.push(...res.data.data.followingArticleFeed.items.edges);
+        } else {
+          this.followArticles = res.data.data.followingArticleFeed.items.edges;
+        }
         this.hasNextPage = res.data.data.followingArticleFeed.items.pageInfo.hasNextPage;
         this.endCursor = res.data.data.followingArticleFeed.items.pageInfo.endCursor;
       }
@@ -138,6 +182,51 @@ export default {
         line-height: 1.5;
         vertical-align: middle;
         display: inline;
+      }
+    }
+    .article-content {
+      font-size: 15px;
+      margin: 4px 16px 0 0;
+      line-height: 1.53;
+      color: #5c6066;
+    }
+  }
+  .action-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-top: 1px solid #ebebeb;
+    margin-top: 2px;
+    height: 34px;
+    .action {
+      flex: 1;
+      position: relative;
+      text-align: center;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .like-icon {
+        width: 18px;
+        height: 18px;
+        fill: none;
+      }
+      span {
+        font-size: 13px;
+        color: #8a93a0;
+        line-height: 18px;
+        margin-left: 4px;
+      }
+      &:not(:last-child):after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 0;
+        margin-top: -12px;
+        width: 1px;
+        height: 24px;
+        background-color: #ebebeb;
       }
     }
   }
