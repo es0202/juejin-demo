@@ -21,7 +21,7 @@ module.exports = {
       '/v1/':{
         target:'http://gold-tag-ms.juejin.im/',
         changeOrigin: true //跨域必须
-      }
+      },
     },
 
     // Various Dev Server settings

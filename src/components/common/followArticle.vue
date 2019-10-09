@@ -30,12 +30,13 @@
           >{{item.node.targets['0'].content.slice(0,-54)?item.node.targets['0'].content.slice(0,-54)+'...':item.node.targets['0'].content}}</div>
         </router-link>
         <div class="action-box">
-          <div class="action">
+          <div :class="item.node.targets[0].viewerHasLiked?'action active':'action'" @click.prevent="hasLiked(item.node.targets[0].id,$event)">
             <svg class="like-icon">
               <use xlink:href="#like2" />
             </svg>
             <span>{{item.node.targets[0].likeCount}}</span>
           </div>
+          <!--点过赞的才有active样式-->
           <div class="action">
             <svg class="like-icon">
               <use xlink:href="#comment2" />
@@ -122,6 +123,31 @@ export default {
       }
       if (_second > 0) {
         return _second + '秒前';
+      }
+    },
+    hasLiked(id, e) {
+      if (e.currentTarget.className.indexOf('active') > 0) {
+        //已经点赞
+        //绕不过cros的预检
+        // axios
+        //   .delete('https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/' + id, config.header1)
+        //   .then(v => {
+        e.currentTarget.className = 'action';
+        e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) - 1;
+        // })
+        // .catch(err => {
+        //   console.log(err);
+        // });
+      } else {
+        // axios
+        //   .put('https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/' + id, config.header1)
+        //   .then(v => {
+        e.currentTarget.className = 'action active';
+        e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) + 1;
+        // })
+        // .catch(err => {
+        //   console.log(err);
+        // });
       }
     }
   }
@@ -211,6 +237,7 @@ export default {
         width: 18px;
         height: 18px;
         fill: none;
+        stroke: #8a93a0;
       }
       span {
         font-size: 13px;
@@ -227,6 +254,15 @@ export default {
         width: 1px;
         height: 24px;
         background-color: #ebebeb;
+      }
+      &.active {
+        span {
+          color: #37c700;
+        }
+        .like-icon {
+          stroke: #37c700;
+          fill: #37c700;
+        }
       }
     }
   }

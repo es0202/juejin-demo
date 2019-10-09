@@ -91,4 +91,6 @@ webpack 升级到4
   ```
   ##### 不允许在 js 中混用 module.exports 和 import ，webpack 配置的 babel-loader 模块移除条件 resolve('node_modules/webpack-dev-server/client')
 
+#### 点赞、取消点赞为put/delete方法，绕不过cors预检，只做了动态样式，没法调用掘金的接口
 
+#### TODO followArticle.vue/tag post param
