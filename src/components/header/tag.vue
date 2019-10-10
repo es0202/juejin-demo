@@ -5,7 +5,7 @@
         v-for="(item,index) in tags"
         :key="index"
         :class="$route.path.split('/home/')[1] ?
-          $route.params.path==item.title?'nav-item active':'nav-item'
+          $route.path.split('/home/')[1]==item.title?'nav-item active':'nav-item'
           : index==0?'nav-item active':'nav-item'"
         :data-id="item.id"
       >
@@ -41,7 +41,7 @@ export default {
       if (res.data.s == 1 && res.data.d.categoryList) {
         this.tags.push(...res.data.d.categoryList);
       for (let i = 0; i < this.tags.length; ++i) {
-        if (this.tags[i].title==this.$route.params.path) {
+        if (this.tags[i].title==this.$route.path.split('/home/')[1]) {
           this.changeCategory(this.tags[i].id);
         }
       }

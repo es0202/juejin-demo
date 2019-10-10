@@ -3,7 +3,7 @@
     <tag></tag>
     <div class="container">
       <!--tag组件中数据请求完成categoryId赋值-->
-      <router-view v-if="categoryId!=null"></router-view>
+      <router-view v-if="$store.state.categoryId!==null"></router-view>
       <div class="aside">
         <authors></authors>
       </div>

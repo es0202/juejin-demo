@@ -93,4 +93,4 @@ webpack 升级到4
 
 #### 点赞、取消点赞为put/delete方法，绕不过cors预检，只做了动态样式，没法调用掘金的接口
 
-#### TODO followArticle.vue/tag post param
+#### TODO this.$route.params.path存在条件？

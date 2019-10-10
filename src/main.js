@@ -13,7 +13,7 @@ Vue.prototype.lodash = lodash
 //全局使用lodash 无需每个组件中Import
 
 /* eslint-disable no-new */
-new Vue({
+window.vm=new Vue({
   el: '#app',
   router,
   store,

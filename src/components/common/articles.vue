@@ -139,7 +139,7 @@ export default {
         this.lodash.merge(
           {},
           config.param_common,
-          config[this.$route.params.path=='recommend' ? 'param_recommend' : 'param_others'],
+          config[this.$route.path.split('/home/')[1]=='recommend' ? 'param_recommend' : 'param_others'],
           article_type,
           category
         ),
