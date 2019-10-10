@@ -2,7 +2,8 @@
   <div class="main-wrap">
     <tag></tag>
     <div class="container">
-      <router-view></router-view>
+      <!--tag组件中数据请求完成categoryId赋值-->
+      <router-view v-if="categoryId!=null"></router-view>
       <div class="aside">
         <authors></authors>
       </div>
@@ -13,7 +14,11 @@
 <script>
 import tag from '../header/tag';
 import authors from '../common/authors';
+import { mapState } from 'vuex';
 export default {
+  computed: {
+    ...mapState(['categoryId'])
+  },
   components: {
     tag,
     authors

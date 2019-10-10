@@ -27,7 +27,10 @@ export default new Router({
         }, {
           path: 'follow',
           component: followArticle
-        }
+        }, {
+          path: ':path',
+          component: articles
+        },
       ]
     },
   ]

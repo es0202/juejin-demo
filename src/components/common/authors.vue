@@ -4,7 +4,9 @@
       <p class="title">🎖️作者榜</p>
       <ul class="list-authors">
         <a :href="'https://juejin.im/user/'+item.id" class="item-author" v-for="item in authors" tag="li">
-          <i class="avatar" :style="'background-image:url('+item.author.avatarLarge.split('?')[0]+'?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1)'"></i>
+          <!-- <i class="avatar" :style="'background-image:url('+item.author.avatarLarge.split('?')[0]+'?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1)'"></i> -->
+          <!--background-image还是会带referrer请求图片-->
+          <img :src="item.author.avatarLarge.split('?')[0]+'?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1'" alt class="avatar" />
           <div class="author-info">
             <p class="author-name">
               <span>{{item.author.username}}</span>

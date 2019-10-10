@@ -5,8 +5,9 @@
         v-for="(item,index) in tags"
         :key="index"
         :class="$route.path.split('/home/')[1] ?
-          $route.path.split('/home/')[1]==item.title?'nav-item active':'nav-item'
+          $route.params.path==item.title?'nav-item active':'nav-item'
           : index==0?'nav-item active':'nav-item'"
+        :data-id="item.id"
       >
         <!-- <a :href="'/home/'+item.title">{{item.name}}</a> -->
         <!-- a标签切换路径不能复用其他组件 -->
@@ -20,20 +21,30 @@
 </template>
 <script>
 import config from '../../../config/http';
+import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      tags: [{ name: '推荐', title: 'recommend' }, { name: '关注', title: 'follow' }]
+      tags: [{ name: '推荐', title: 'recommend', id: '' }, { name: '关注', title: 'follow', id: '' }]
     };
+  },
+  computed: {
+    ...mapState(['categoryId'])
   },
   mounted() {
     this.initData();
   },
   methods: {
+    ...mapActions(['changeCategory']),
     async initData() {
       let res = await axios.get('/v1/categories', config.header1);
       if (res.data.s == 1 && res.data.d.categoryList) {
         this.tags.push(...res.data.d.categoryList);
+      for (let i = 0; i < this.tags.length; ++i) {
+        if (this.tags[i].title==this.$route.params.path) {
+          this.changeCategory(this.tags[i].id);
+        }
+      }
       }
     }
   }

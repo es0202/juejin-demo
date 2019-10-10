@@ -71,6 +71,7 @@
 
 <script>
 import config from '../../../config/http';
+import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -87,8 +88,13 @@ export default {
       loadMore: false //防止持续请求数据
     };
   },
+  computed: {
+    ...mapState(['categoryId'])
+  },
   mounted() {
     const that = this;
+    //刷新页面也要记录当前categoryId，否则会显示推荐类别的文章
+    //父组件中先判断categoryId是否存在再渲染当前组件
     this.initData();
     window.addEventListener('scroll', () => {
       if (window.scrollY + document.documentElement.clientHeight + 300 > document.documentElement.scrollHeight) {
@@ -101,6 +107,7 @@ export default {
     });
   },
   methods: {
+    ...mapActions(['changeCategory']),
     async initData(isAppend) {
       this.loadMore = false;
       let article_type;
@@ -117,12 +124,25 @@ export default {
           }
         };
       }
+      //标签id
+      let category = {
+        variables: {
+          category: this.categoryId,
+          tags: []
+        }
+      };
       if (isAppend && this.hasNextPage) {
         article_type.variables.after = this.endCursor;
       }
       let res = await axios.post(
         '/api/query',
-        this.lodash.merge({}, config.param_recommend, article_type, config.param_common),
+        this.lodash.merge(
+          {},
+          config.param_common,
+          config[this.$route.params.path=='recommend' ? 'param_recommend' : 'param_others'],
+          article_type,
+          category
+        ),
         config.header
       );
       if (res.data.data.articleFeed && res.data.data.articleFeed.items && res.data.data.articleFeed.items.edges) {
@@ -134,8 +154,7 @@ export default {
         }
         this.hasNextPage = res.data.data.articleFeed.items.pageInfo.hasNextPage;
         this.endCursor = res.data.data.articleFeed.items.pageInfo.endCursor;
-      }
-      else{
+      } else {
         //200 return error message
       }
     },
@@ -178,10 +197,19 @@ export default {
         path: '/home',
         query: { sort: data }
       });
+    },
+    changeTag() {
+      for (let i = 0; i < document.querySelector('.tag-wrap').children[0].children.length; ++i) {
+        let item = document.querySelector('.tag-wrap').children[0].children[i];
+        if (item.className.indexOf('active') > 0) {
+          this.changeCategory(item.getAttribute('data-id'));
+        }
+      }
     }
   },
   watch: {
     $route(to, from) {
+      this.changeTag();
       //监听路由改变
       this.initData();
     }
