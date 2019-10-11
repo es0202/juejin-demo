@@ -63,6 +63,7 @@
               </ul>
             </div>
           </div>
+          <img class="screenshot" v-show="item.node.screenshot" :src="item.node.screenshot.split('?')[0]+'?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1'" />
         </router-link>
       </ul>
     </div>
@@ -139,7 +140,7 @@ export default {
         this.lodash.merge(
           {},
           config.param_common,
-          config[this.$route.path.split('/home/')[1]=='recommend' ? 'param_recommend' : 'param_others'],
+          config[this.$route.path.split('/home/')[1] == 'recommend'||!this.$route.path.split('/home/')[1] ? 'param_recommend' : 'param_others'],
           article_type,
           category
         ),
@@ -211,8 +212,8 @@ export default {
     $route(to, from) {
       this.changeTag();
       //监听路由改变
-      if(to.query.sort=="THREE_DAYS_HOTTEST"){
-        this.selected="THREE_DAYS_HOTTEST"
+      if (to.query.sort == 'THREE_DAYS_HOTTEST') {
+        this.selected = 'THREE_DAYS_HOTTEST';
       }
       this.initData();
     }
@@ -281,6 +282,9 @@ export default {
       .item-article {
         border-top: 1px solid hsla(0, 0%, 59.2%, 0.1);
         padding: 18px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;//两端对齐
         .content-box {
           .info-row {
             font-size: 12px;
@@ -342,6 +346,11 @@ export default {
               }
             }
           }
+        }
+        .screenshot {
+          width: 60px;
+          height: 60px;
+          flex: 0 0 auto;
         }
       }
     }

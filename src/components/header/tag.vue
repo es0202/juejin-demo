@@ -40,11 +40,16 @@ export default {
       let res = await axios.get('/v1/categories', config.header1);
       if (res.data.s == 1 && res.data.d.categoryList) {
         this.tags.push(...res.data.d.categoryList);
-      for (let i = 0; i < this.tags.length; ++i) {
-        if (this.tags[i].title==this.$route.path.split('/home/')[1]) {
-          this.changeCategory(this.tags[i].id);
+        //存在嵌套路由
+        if (this.$route.path.split('/home/')[1]) {
+          for (let i = 0; i < this.tags.length; ++i) {
+            if (this.tags[i].title == this.$route.path.split('/home/')[1]) {
+              this.changeCategory(this.tags[i].id);
+            }
+          }
+        } else {
+          this.changeCategory('');
         }
-      }
       }
     }
   }
