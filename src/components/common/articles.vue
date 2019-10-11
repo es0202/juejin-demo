@@ -211,6 +211,9 @@ export default {
     $route(to, from) {
       this.changeTag();
       //监听路由改变
+      if(to.query.sort=="THREE_DAYS_HOTTEST"){
+        this.selected="THREE_DAYS_HOTTEST"
+      }
       this.initData();
     }
   }
