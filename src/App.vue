@@ -52,4 +52,7 @@ export default {
 
 <style lang='less'>
 @import '../static/css/reset.less';
+#app {
+  background-color: #f4f5f5;
+}
 </style>

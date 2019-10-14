@@ -1,7 +1,7 @@
 #### config/http.js文件内容如下：
 ```
 module.exports = {
- header: {
+  header: {
     headers: {
       'X-Agent': 'Juejin/Web',
       'X-Legacy-Device-Id': '',
@@ -15,20 +15,38 @@ module.exports = {
       'X-Juejin-Client': '',
       'X-Juejin-Src': 'web',
       'X-Juejin-Token': '',
-      'X-Juejin-Uid': ''
+      'X-Juejin-Uid': '',
     }
   },
   param_common: {
     'operationName': '',
-    'query': ''
-  },
-  param_recommend: {
+    'query': '',
     'variables': {
       'first': 20, //一次性20条数据
     },
+  },
+  param_recommend: {
     'extensions': {
       'query': {
-        'id': '' //推荐标签请求文章id未知来源，其他标签请求文章id来源于v1/categories接口返回
+        'id': ''
+      }
+    }
+  },
+  param_others: {//除了推荐、关注标签外其他标签使用的query id一致
+    'extensions': {
+      'query': {
+        'id': ""
+      }
+    }
+  },
+  param_follow: {
+    "variables": {
+      "type": "ARTICLE",
+      "after": ""
+    },
+    "extensions": {
+      "query": {
+        "id": ""
       }
     }
   },
@@ -49,14 +67,14 @@ module.exports = {
     },
     'extensions': {
       'query': {
-        'id': ''//请求作者榜id未知来源
+        'id': ''
       }
     }
   }
 }
 ```
 本项目跨域调用掘金的接口
-请自行登录juejin.im, 获取调用接口所需的token值
+请自行登录juejin.im, 获取调用接口所需的token及各种查询的extensions.query.id值
 
 #### 升级问题
 webpack-bundel-analyzer 3.3.2版本容易受 css 攻击

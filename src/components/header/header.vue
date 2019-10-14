@@ -8,11 +8,11 @@
         <div class="title">掘金</div>
         <!--宽度>980px显示-->
         <ul class="nav-list">
-          <li class="nav-item">
-            <a href>首页</a>
+          <li :class="$route.matched[0].path=='/home'?'nav-item active':'nav-item'">
+            <router-link to="/home">首页</router-link>
           </li>
-          <li class="nav-item">
-            <a href>沸点</a>
+          <li :class="$route.matched[0].path=='/boiling'?'nav-item active':'nav-item'">
+            <router-link to="/boiling">沸点</router-link>
           </li>
           <li class="nav-item">
             <a href>话题</a>
@@ -116,6 +116,9 @@
           font-size: 16px;
           padding: 0 18px;
           color: #71777c;
+          &.active {
+            color: #007fff;
+          }
         }
       }
       .search-form {

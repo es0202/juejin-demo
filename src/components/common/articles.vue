@@ -16,7 +16,9 @@
     </div>
     <div class="articles-wrap">
       <ul class="list-articles">
-        <router-link to="item.node.originalUrl" v-for="item in articles" tag="li" :key="item.node.id" class="item-article">
+        <a :href="item.node.originalUrl" v-for="item in articles" target="_blank" class="item-article">
+          <!--不是同一域名，没法切换路由-->
+          <!-- <router-link to="item.node.originalUrl" v-for="item in articles" tag="li" :key="item.node.id" class="item-article"> -->
           <div class="content-box">
             <div class="info-row">
               <ul class="list-info">
@@ -63,8 +65,13 @@
               </ul>
             </div>
           </div>
-          <img class="screenshot" v-show="item.node.screenshot" :src="item.node.screenshot.split('?')[0]+'?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1'" />
-        </router-link>
+          <img
+            class="screenshot"
+            v-show="item.node.screenshot"
+            :src="item.node.screenshot.split('?')[0]+'?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1'"
+          />
+          <!-- </router-link> -->
+        </a>
       </ul>
     </div>
   </div>
@@ -140,7 +147,11 @@ export default {
         this.lodash.merge(
           {},
           config.param_common,
-          config[this.$route.path.split('/home/')[1] == 'recommend'||!this.$route.path.split('/home/')[1] ? 'param_recommend' : 'param_others'],
+          config[
+            this.$route.path.split('/home/')[1] == 'recommend' || !this.$route.path.split('/home/')[1]
+              ? 'param_recommend'
+              : 'param_others'
+          ],
           article_type,
           category
         ),
@@ -284,7 +295,7 @@ export default {
         padding: 18px 24px;
         display: flex;
         align-items: center;
-        justify-content: space-between;//两端对齐
+        justify-content: space-between; //两端对齐
         .content-box {
           .info-row {
             font-size: 12px;

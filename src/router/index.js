@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/components/page/home'
+import boiling from '@/components/page/boilingPoint'
 import articles from '@/components/common/articles'
 import followArticle from '@/components/common/followArticle'
 
@@ -32,6 +33,9 @@ export default new Router({
           component: articles
         },
       ]
-    },
+    }, {
+      path: '/boiling',
+      component: boiling
+    }
   ]
 })

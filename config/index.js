@@ -18,10 +18,14 @@ module.exports = {
         target: 'http://web-api.juejin.im/',
         changeOrigin: true //跨域必须
       },
-      '/v1/':{
-        target:'http://gold-tag-ms.juejin.im/',
+      '/v1/': {
+        target: 'http://gold-tag-ms.juejin.im/',
         changeOrigin: true //跨域必须
       },
+      '/api2/': {
+        target: 'http://pin-guide-ms.juejin.im/v1/',
+        changeOrigin: true
+      }
     },
 
     // Various Dev Server settings
