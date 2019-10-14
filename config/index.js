@@ -18,12 +18,26 @@ module.exports = {
         target: 'http://web-api.juejin.im/',
         changeOrigin: true //跨域必须
       },
+      // '/v1/': {
+      //   target: 'http://gold-tag-ms.juejin.im/',
+      //   changeOrigin: true //跨域必须
+      // },
       '/v1/': {
         target: 'http://gold-tag-ms.juejin.im/',
-        changeOrigin: true //跨域必须
+        changeOrigin: true
       },
       '/api2/': {
+        pathRewrite: {
+          '^/api2': ''
+        },
         target: 'http://pin-guide-ms.juejin.im/v1/',
+        changeOrigin: true,
+      },
+      '/api3/': {
+        pathRewrite: {
+          '^/api3': ''//否则请求地址变成target/api3/...
+        },
+        target: 'http://short-msg-ms.juejin.im/v1/',
         changeOrigin: true
       }
     },

@@ -1,6 +1,8 @@
 <template>
   <div class="main-wrap">
     <dock></dock>
+    <div></div>
+    <sidebar></sidebar>
   </div>
 </template>
 <script>
@@ -34,5 +36,7 @@ export default {
   margin: 0 auto;
   position: relative;
   margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

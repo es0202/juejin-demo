@@ -52,6 +52,7 @@ export default {
   width: 112px;
   margin-right: 15px;
   background-color: #fff;
+  border-radius: 4px;
   .nav-list {
     padding: 16px 12px;
     .nav-item {

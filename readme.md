@@ -113,3 +113,4 @@ webpack 升级到4
 
 #### TODO
 #### take care '/home'和'/home/recommend'相关判断
+#### axios请求404，多半是跨域拼接的请求地址不对，pathRewrite没设置
