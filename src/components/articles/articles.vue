@@ -50,7 +50,7 @@
             <p class="title-row">{{item.node.title}}</p>
             <div class="action-row">
               <ul class="list-action">
-                <li class="item-action">
+                <li :class="item.node.viewerHasLiked?'item-action active':'item-action'" @click.prevent="hasLiked(item.node.likeCount,$event)">
                   <svg class="like-icon">
                     <use xlink:href="#like" />
                   </svg>
@@ -218,6 +218,15 @@ export default {
           this.changeCategory(item.getAttribute('data-id'));
         }
       }
+    },
+    hasLiked(count, e) {
+      if (e.currentTarget.className.indexOf('active') > 0) {
+        e.currentTarget.className = 'item-action';
+        e.currentTarget.children[1].innerText = count - 1;
+      } else {
+        e.currentTarget.className = 'item-action active';
+        e.currentTarget.children[1].innerText = count + 1;
+      }
     }
   },
   watch: {
@@ -339,6 +348,15 @@ export default {
                 padding: 0 10px;
                 &:not(:first-child) {
                   border-left: none;
+                }
+
+                &.active {
+                  .like-icon {
+                    fill: #6cbd45;
+                  }
+                  .count {
+                    color: #6cbd45;
+                  }
                 }
                 .like-icon {
                   width: 14px;
