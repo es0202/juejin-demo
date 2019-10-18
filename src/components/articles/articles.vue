@@ -67,9 +67,10 @@
           </div>
           <img
             class="screenshot"
-            v-show="item.node.screenshot"
+            v-if="item.node.screenshot"
             :src="item.node.screenshot.split('?')[0]+'?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1'"
           />
+          <!--不用v-show判断-->
           <!-- </router-link> -->
         </a>
       </ul>

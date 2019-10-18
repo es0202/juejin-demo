@@ -1,7 +1,10 @@
 <template>
   <div class="main-wrap">
     <dock></dock>
-    <div></div>
+    <div class="content">
+      <editor></editor>
+      <router-view></router-view>
+    </div>
     <sidebar></sidebar>
   </div>
 </template>
@@ -9,6 +12,7 @@
 import sidebar from '../common/sidebar';
 import dock from '../common/dock';
 import config from '../../../config/http';
+import editor from '../common/boilngEditor';
 export default {
   mounted() {
     this.initData();
@@ -24,7 +28,8 @@ export default {
   },
   components: {
     sidebar,
-    dock
+    dock,
+    editor
   }
 };
 </script>
@@ -38,5 +43,8 @@ export default {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
+  .content{
+    width: 570px;
+  }
 }
 </style>

@@ -2,8 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/components/page/home'
 import boiling from '@/components/page/boilingPoint'
-import articles from '@/components/common/articles'
-import followArticle from '@/components/common/followArticle'
+import articles from '@/components/articles/articles'
+import followArticles from '@/components/followArticles/followArticles'
+import boilingArticle from '@/components/boilingArticles/boilingArticles'
+import followBoiling from '@/components/followBoiling/followBoiling'
 
 Vue.use(Router)
 
@@ -27,7 +29,7 @@ export default new Router({
           component: articles
         }, {
           path: 'follow',
-          component: followArticle
+          component: followArticles
         }, {
           path: ':path',
           component: articles
@@ -35,7 +37,17 @@ export default new Router({
       ]
     }, {
       path: '/boiling',
-      component: boiling
+      component: boiling,
+      children:[{
+        path:'',
+        component:boilingArticle
+      },{
+        path:'follow',
+        component:followBoiling
+      },{
+        path:':id',
+        component:boilingArticle
+      }]
     }
   ]
 })

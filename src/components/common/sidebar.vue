@@ -42,7 +42,10 @@
       <span class="text">如何玩转沸点</span>
     </a>
     <div class="sticky-box">
-      <a href="https://juejin.im/book/5c90640c5188252d7941f5bb/section/5c90673ee51d452a0748c424" target="_blank" rel="noopener noreferrer"></a>
+      <a class="guide-link" href="https://juejin.im/book/5c90640c5188252d7941f5bb/section/5c90673ee51d452a0748c424" target="_blank" rel="noopener noreferrer">
+        <img class="icon" src="https://b-gold-cdn.xitu.io/v3/static/img/guide-icon.6c1b9a0.svg" alt />
+        <span class="text">如何玩转沸点</span>
+      </a>
     </div>
   </div>
 </template>
@@ -56,6 +59,13 @@ export default {
   },
   mounted() {
     this.initData();
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > document.querySelector('.sidebar-wrap').clientHeight) {
+        document.getElementsByClassName('sticky-box')[0].style.opacity = 1;
+      } else {
+        document.getElementsByClassName('sticky-box')[0].style.opacity = 0;
+      }
+    });
   },
   methods: {
     async initData() {
@@ -115,7 +125,7 @@ export default {
             overflow: hidden;
             text-overflow: ellipsis;
             font-size: 14px;
-            color: #909090;
+            color: #2e3135;
           }
           .action {
             font-size: 12px;
@@ -143,10 +153,18 @@ export default {
       height: 36px;
       margin-right: 10px;
     }
-    .text{
+    .text {
       font-size: 14px;
-      color:#2e3135;
+      color: #2e3135;
     }
+  }
+  .sticky-box {
+    position: fixed;
+    top: 8px;
+    width: 248px;
+    z-index: 5;
+    opacity: 0;
+    transition: all 0.2s;
   }
 }
 </style>
