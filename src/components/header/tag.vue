@@ -25,7 +25,8 @@ import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      tags: [{ name: '推荐', title: 'recommend', id: '' }, { name: '关注', title: 'follow', id: '' }]
+      tags: [{ name: '推荐', title: 'recommend', id: '' }, { name: '关注', title: 'follow', id: '' }],
+      beforeScroll: ''
     };
   },
   computed: {
@@ -33,9 +34,22 @@ export default {
   },
   mounted() {
     this.initData();
+    this.beforeScroll = window.scrollY;
+    window.addEventListener('scroll', this.scrollEvent);
   },
   methods: {
     ...mapActions(['changeCategory']),
+    scrollEvent() {
+      //方便切换路由销毁事件
+      let afterScroll = window.scrollY;
+      if (window.scrollY > 150 && afterScroll - this.beforeScroll > 150) {
+        this.beforeScroll = afterScroll;
+        document.getElementsByClassName('tag-wrap')[0].className = 'tag-wrap top';
+      } else if (this.beforeScroll - afterScroll > 100) {
+        this.beforeScroll = afterScroll;
+        document.getElementsByClassName('tag-wrap')[0].className = 'tag-wrap';
+      }
+    },
     async initData() {
       let res = await axios.get('/v1/categories', config.header1);
       if (res.data.s == 1 && res.data.d.categoryList) {
@@ -52,6 +66,9 @@ export default {
         }
       }
     }
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>

@@ -50,7 +50,7 @@
             <p class="title-row">{{item.node.title}}</p>
             <div class="action-row">
               <ul class="list-action">
-                <li :class="item.node.viewerHasLiked?'item-action active':'item-action'" @click.prevent="hasLiked(item.node.likeCount,$event)">
+                <li :class="item.node.viewerHasLiked?'item-action active':'item-action'" @click.prevent="hasLiked(item.node.id,$event)">
                   <svg class="like-icon">
                     <use xlink:href="#like" />
                   </svg>
@@ -219,13 +219,13 @@ export default {
         }
       }
     },
-    hasLiked(count, e) {
+    hasLiked(id, e) {
       if (e.currentTarget.className.indexOf('active') > 0) {
         e.currentTarget.className = 'item-action';
-        e.currentTarget.children[1].innerText = count - 1;
+        e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) - 1;
       } else {
         e.currentTarget.className = 'item-action active';
-        e.currentTarget.children[1].innerText = count + 1;
+        e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) + 1;
       }
     }
   },

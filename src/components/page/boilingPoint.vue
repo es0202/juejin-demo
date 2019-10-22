@@ -15,16 +15,7 @@ import config from '../../../config/http';
 import editor from '../common/boilngEditor';
 export default {
   mounted() {
-    this.initData();
-  },
-  methods: {
-    async initData() {
-      var res = await axios.post(
-        '/api/query',
-        this.lodash.merge({}, config.param_boiling_common, config.param_boiling_recommend),
-        config.header
-      );
-    }
+
   },
   components: {
     sidebar,

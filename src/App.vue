@@ -19,21 +19,22 @@ export default {
     };
   },
   mounted() {
-    let beforeScroll = window.scrollY;
     const that = this;
+    let beforeScroll = window.scrollY;
+    if (window.scrollY > document.documentElement.clientHeight) {
+      that.isShow = true;
+    } else {
+      that.isShow = false;
+    }
     window.addEventListener('scroll', function() {
       let afterScroll = window.scrollY;
       if (window.scrollY > 150 && afterScroll - beforeScroll > 150) {
         //下滚
         beforeScroll = afterScroll;
         document.getElementsByClassName('header-wrap')[0].firstChild.className = 'container hide';
-        document.getElementsByClassName('tag-wrap')[0].className = 'tag-wrap top';
-        document.getElementsByClassName('sticky-block')[0].className = 'sticky-block top';
       } else if (beforeScroll - afterScroll > 100) {
         beforeScroll = afterScroll;
         document.getElementsByClassName('header-wrap')[0].firstChild.className = 'container';
-        document.getElementsByClassName('tag-wrap')[0].className = 'tag-wrap';
-        document.getElementsByClassName('sticky-block')[0].className = 'sticky-block';
       }
       if (window.scrollY > document.documentElement.clientHeight) {
         that.isShow = true;

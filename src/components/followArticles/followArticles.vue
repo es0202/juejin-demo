@@ -12,9 +12,10 @@
               <div class="author-name">{{item.node.targets['0'].user.username}}</div>
               <!--TODO calDate前面的字段过长省略号显示-->
               <div class="author-info">
-                {{(item.node.targets['0'].user.jobTitle&&item.node.targets['0'].user.company?
-                item.node.targets['0'].user.jobTitle+'@'+item.node.targets['0'].user.company :
-                item.node.targets['0'].user.jobTitle+item.node.targets['0'].user.company)+' · '+calDate(item.node.targets['0'].createdAt)}}
+                {{item.node.targets[0].user.jobTitle
+                +(item.node.targets[0].user.company ? ' @ '+item.node.targets[0].user.company : '')
+                +(item.node.targets[0].user.jobTitle||item.node.targets[0].user.company ? ' · ' : '')
+                +calDate(item.node.targets['0'].createdAt)}}
               </div>
             </li>
           </ul>

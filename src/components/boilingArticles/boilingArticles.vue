@@ -1,17 +1,11 @@
 <template>
   <div class="boiling-articles">
     <ul class="article-list">
-      <router-link to class="list-item" tag="li">
-        <div class="item-header"></div>
-        <div class="item-content"></div>
-        <div class="action-box"></div>
-      </router-link>
     </ul>
   </div>
 </template>
 <script>
 import config from '../../../config/http';
-import { type } from 'os';
 export default {
   data() {
     return {
@@ -57,6 +51,7 @@ export default {
         );
         res = await axios.get(url, { params: param });
         if (res.data.d && res.data.d.list) {
+          this.articles=this.data.d.list
         }
       } else {
         url = '/api/query';
@@ -67,6 +62,9 @@ export default {
           config[this.$route.params.id ? 'param_boiling_' + this.$route.params.id : 'param_boiling_recommend']
         );
         res = await axios.post(url, param, header);
+        if(res.data.data&&res.data.data){
+
+        }
       }
 
       // if (isAppend && this.hasNextPage) {

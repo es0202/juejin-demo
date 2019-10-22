@@ -58,20 +58,33 @@ import config from '../../../config/http';
 export default {
   data() {
     return {
-      authors: []
+      authors: [],
+      beforeScroll: ''
     };
   },
   mounted() {
     this.initData();
-    window.addEventListener('scroll', function() {
+    this.beforeScroll = window.scrollY;
+    window.addEventListener('scroll', this.scrollEvent);
+  },
+  methods: {
+    scrollEvent() {
+      //滚动超过header+tag+author高度，sticky-block显示
       if (window.scrollY > 600) {
         document.getElementsByClassName('sticky-block')[0].style.opacity = 1;
       } else {
         document.getElementsByClassName('sticky-block')[0].style.opacity = 0;
       }
-    });
-  },
-  methods: {
+      //header显示sticky-block margin-top加60px
+      let afterScroll = window.scrollY;
+      if (window.scrollY > 150 && afterScroll - this.beforeScroll > 150) {
+        this.beforeScroll = afterScroll;
+        document.getElementsByClassName('sticky-block')[0].className = 'sticky-block top';
+      } else if (this.beforeScroll - afterScroll > 100) {
+        this.beforeScroll = afterScroll;
+        document.getElementsByClassName('sticky-block')[0].className = 'sticky-block';
+      }
+    },
     async initData() {
       let res = await axios.post('/api/query', this.lodash.merge(config.param_authors, config.param_common), config.header);
       if (res.data.data && res.data.data.recommendationCard && res.data.data.recommendationCard.items) {
@@ -84,6 +97,9 @@ export default {
         this.authors.push(res.data.data.recommendationCard.items[arr[2]]);
       }
     }
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>
