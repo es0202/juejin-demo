@@ -101,22 +101,22 @@ export default {
     ...mapState(['categoryId'])
   },
   mounted() {
-    const that = this;
     //刷新页面也要记录当前categoryId，否则会显示推荐类别的文章
     //父组件中先判断categoryId是否存在再渲染当前组件
     this.initData();
-    window.addEventListener('scroll', () => {
-      if (window.scrollY + document.documentElement.clientHeight + 300 > document.documentElement.scrollHeight) {
-        if (that.loadMore) {
-          that.initData('true');
-        }
-      } else {
-        that.loadMore = true;
-      }
-    });
+    window.addEventListener('scroll', this.scrollEvent);
   },
   methods: {
     ...mapActions(['changeCategory']),
+    scrollEvent() {
+      if (window.scrollY + document.documentElement.clientHeight + 300 > document.documentElement.scrollHeight) {
+        if (this.loadMore) {
+          this.initData('true');
+        }
+      } else {
+        this.loadMore = true;
+      }
+    },
     async initData(isAppend) {
       this.loadMore = false;
       let article_type;
@@ -214,13 +214,13 @@ export default {
     changeTag() {
       for (let i = 0; i < document.querySelector('.tag-wrap').children[0].children.length; ++i) {
         let item = document.querySelector('.tag-wrap').children[0].children[i];
-        if (item.className.indexOf('active') > 0) {
+        if (item.className.indexOf('active') > -1) {
           this.changeCategory(item.getAttribute('data-id'));
         }
       }
     },
     hasLiked(id, e) {
-      if (e.currentTarget.className.indexOf('active') > 0) {
+      if (e.currentTarget.className.indexOf('active') > -1) {
         e.currentTarget.className = 'item-action';
         e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) - 1;
       } else {
@@ -238,6 +238,9 @@ export default {
       }
       this.initData();
     }
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>

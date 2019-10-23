@@ -26,6 +26,7 @@ export default {
     } else {
       that.isShow = false;
     }
+    //???????????????
     window.addEventListener('scroll', function() {
       let afterScroll = window.scrollY;
       if (window.scrollY > 150 && afterScroll - beforeScroll > 150) {

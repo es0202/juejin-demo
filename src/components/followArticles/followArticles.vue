@@ -68,19 +68,19 @@ export default {
     };
   },
   mounted() {
-    const that = this;
     this.initData();
-    window.addEventListener('scroll', () => {
-      if (window.scrollY + document.documentElement.clientHeight + 300 > document.documentElement.scrollHeight) {
-        if (that.loadMore) {
-          that.initData('true');
-        }
-      } else {
-        that.loadMore = true;
-      }
-    });
+    window.addEventListener('scroll', this.scrollEvent);
   },
   methods: {
+    scrollEvent() {
+      if (window.scrollY + document.documentElement.clientHeight + 300 > document.documentElement.scrollHeight) {
+        if (this.loadMore) {
+          this.initData('true');
+        }
+      } else {
+        this.loadMore = true;
+      }
+    },
     async initData(isAppend) {
       this.loadMore = false;
       let param_follow = config.param_follow;
@@ -127,7 +127,7 @@ export default {
       }
     },
     hasLiked(id, e) {
-      if (e.currentTarget.className.indexOf('active') > 0) {
+      if (e.currentTarget.className.indexOf('active') > -1) {
         //已经点赞
         //绕不过cros的预检
         // axios
@@ -151,6 +151,9 @@ export default {
         // });
       }
     }
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>
@@ -178,6 +181,7 @@ export default {
         .author-name {
           font-size: 15px;
           color: #17181a;
+          font-weight: 600;
         }
         .author-info {
           font-size: 13px;

@@ -59,15 +59,16 @@ export default {
   },
   mounted() {
     this.initData();
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', this.scrollEvent);
+  },
+  methods: {
+    scrollEvent() {
       if (window.scrollY > document.querySelector('.sidebar-wrap').clientHeight) {
         document.getElementsByClassName('sticky-box')[0].style.opacity = 1;
       } else {
         document.getElementsByClassName('sticky-box')[0].style.opacity = 0;
       }
-    });
-  },
-  methods: {
+    },
     async initData() {
       var res = await axios.get('/api3/getHotRecommendList', {
         params: {
@@ -82,6 +83,9 @@ export default {
         this.recommends = res.data.d.list.slice(0, 3);
       }
     }
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>

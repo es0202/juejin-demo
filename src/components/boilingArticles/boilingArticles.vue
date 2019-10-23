@@ -1,7 +1,6 @@
 <template>
   <div class="boiling-articles">
-    <ul class="article-list">
-    </ul>
+    <ul class="article-list"></ul>
   </div>
 </template>
 <script>
@@ -19,23 +18,23 @@ export default {
     };
   },
   mounted() {
-    const that = this;
     if (this.$route.params.id && ['recommend'].indexOf(this.$route.params.id) == -1) {
       this.type = 1;
     }
     this.initData();
-    window.addEventListener('scroll', () => {
-      if (window.scrollY + document.documentElement.clientHeight + 300 > document.documentElement.scrollHeight) {
-        if (that.loadMore) {
-          that.page++;
-          that.initData('true');
-        }
-      } else {
-        that.loadMore = true;
-      }
-    });
+    window.addEventListener('scroll', this.scrollEvent);
   },
   methods: {
+    scrollEvent() {
+      if (window.scrollY + document.documentElement.clientHeight + 300 > document.documentElement.scrollHeight) {
+        if (this.loadMore) {
+          this.page++;
+          this.initData('true');
+        }
+      } else {
+        this.loadMore = true;
+      }
+    },
     async initData(isAppend) {
       this.loadMore = false;
       let url, header, param;
@@ -51,7 +50,7 @@ export default {
         );
         res = await axios.get(url, { params: param });
         if (res.data.d && res.data.d.list) {
-          this.articles=this.data.d.list
+          this.articles = this.data.d.list;
         }
       } else {
         url = '/api/query';
@@ -62,8 +61,7 @@ export default {
           config[this.$route.params.id ? 'param_boiling_' + this.$route.params.id : 'param_boiling_recommend']
         );
         res = await axios.post(url, param, header);
-        if(res.data.data&&res.data.data){
-
+        if (res.data.data && res.data.data) {
         }
       }
 
@@ -116,6 +114,9 @@ export default {
     $route(to, from) {
       this.initData();
     }
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>
