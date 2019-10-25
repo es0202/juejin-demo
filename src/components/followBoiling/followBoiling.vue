@@ -1,6 +1,6 @@
 <template>
   <div class="boiling-articles">
-    <div class="follow-article-wrap" v-for="(item,index) in articles" :key="index">
+    <div class="follow-article-wrap" v-for="(item,index) in articles" :key="index" @click="handle">
       <div class="article-item" v-if="item.node.action!='FOLLOW_USER'">
         <div class="source-header" v-if="item.node.action.indexOf('LIKE')>-1">
           <span>你关注的</span>
@@ -8,12 +8,12 @@
           <span>赞了这篇{{item.node.action.indexOf('ARTICLE')>-1?'文章':'沸点'}}</span>
         </div>
         <div class="item-header">
-          <ul class="header-content">
-            <li class="header-img">
+          <div class="header-content">
+            <div class="header-img">
               <img :src="item.node.targets['0'].user.avatarLarge.split('?')[0]
               +'?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1'" />
-            </li>
-            <li class="header-info">
+            </div>
+            <div class="header-info">
               <div class="author-name">{{item.node.targets[0].user.username}}</div>
               <!--TODO calDate前面的字段过长省略号显示-->
               <div class="author-info">
@@ -22,9 +22,9 @@
                 +(item.node.targets[0].user.jobTitle||item.node.targets[0].user.company ? ' · ' : '')
                 +calDate(item.node.targets['0'].createdAt)}}
               </div>
-            </li>
-            <li class="header-btn">关注</li>
-          </ul>
+            </div>
+          </div>
+          <div class="header-btn">关注</div>
         </div>
         <!--文章可点击-->
         <router-link v-if="item.node.action.indexOf('ARTICLE')>-1" class="item-content" :to="item.node.targets['0'].originalUrl">
@@ -61,7 +61,10 @@
               :class="item.node.targets[0].pictures[0].split('w=')[1]>1000?'image long':'image'"
               :style="'background-image:url('+item.node.targets[0].pictures[0].split('?')[0]+'?imageView2/1/w/460/h/316/q/85/format/jpg/interlace/1)'"
             ></div>
-          </div> -->
+          </div>-->
+          <div class="pin-topic">
+            <a class="topic-title" :href="'/topic/'+item.node.targets[0].topic.id" v-if="item.node.targets[0].topic">{{item.node.targets[0].topic.title}}</a>
+          </div>
         </div>
 
         <div class="action-box">
@@ -169,13 +172,13 @@ export default {
       }
     },
     calDate(date) {
-      let _date = new Date(date);
-      let _year = this.date.getFullYear() - _date.getFullYear();
-      let _month = this.date.getMonth() - _date.getMonth();
-      let _day = this.date.getDate() - _date.getDate();
-      let _hour = this.date.getHours() - _date.getHours();
-      let _minutes = this.date.getMinutes() - _date.getMinutes();
-      let _second = this.date.getSeconds() - _date.getSeconds();
+      let _date = this.date - new Date(date);
+      let _year = Math.floor(_date / (365 * 24 * 60 * 60 * 1000));
+      let _month = Math.floor(_date / (30 * 24 * 60 * 60 * 1000));
+      let _day = Math.floor(_date / (24 * 60 * 60 * 1000));
+      let _hour = Math.floor(_date / (60 * 60 * 1000));
+      let _minutes = Math.floor(_date / (60 * 1000));
+      let _second = Math.floor(_date / 1000);
       if (_year > 0) {
         return _year + '年前';
       }
@@ -216,6 +219,9 @@ export default {
         e.currentTarget.parentElement.previousElementSibling.innerHTML = content;
         e.currentTarget.innerText = '收回';
       }
+    },
+    handle(e) {
+      console.log(e.target);
     }
   },
   destroyed() {
@@ -245,6 +251,9 @@ export default {
     }
     .item-header {
       padding: 16px 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       .header-content {
         display: flex;
         align-items: center;
@@ -280,6 +289,18 @@ export default {
             margin-top: 2px;
           }
         }
+      }
+      .header-btn {
+        width: 55px;
+        height: 26px;
+        line-height: 26px;
+        font-size: 13px;
+        border-color: #6cbd45;
+        color: #6cbd45;
+        border: 1px solid #37c700;
+        text-align: center;
+        border-radius: 2px;
+        opacity: 0.8;
       }
     }
     .item-content {
@@ -362,6 +383,18 @@ export default {
         &.long {
           width: 148px;
         }
+      }
+    }
+    .pin-topic {
+      margin: 8px 48px 16px 78px;
+      .topic-title {
+        font-size: 13px;
+        line-height: 22px;
+        padding: 0 12px;
+        border: 1px solid #007fff;
+        border-radius: 14px;
+        color: #007fff;
+        display: inline-block;
       }
     }
     .action-box {

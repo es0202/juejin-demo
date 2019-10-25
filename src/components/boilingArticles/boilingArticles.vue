@@ -1,10 +1,16 @@
 <template>
   <div class="boiling-articles">
-    <ul class="article-list"></ul>
+    <articlePie
+      v-for="(item,index) in articles"
+      :key="index"
+      :user="item.node.user||item.node.targets[0].user"
+      :date="calDate(item.node.createdAt||item.node.targets[0].createdAt)"
+    ></articlePie>
   </div>
 </template>
 <script>
 import config from '../../../config/http';
+import articlePie from '../common/articlePie';
 export default {
   data() {
     return {
@@ -17,8 +23,11 @@ export default {
       page: 0
     };
   },
+  components: {
+    articlePie
+  },
   mounted() {
-    if (this.$route.params.id && ['recommend'].indexOf(this.$route.params.id) == -1) {
+    if (this.$route.params.id && ['recommend', 'hot'].indexOf(this.$route.params.id) == -1) {
       this.type = 1;
     }
     this.initData();
@@ -57,46 +66,41 @@ export default {
         header = config.header;
         param = this.lodash.merge(
           {},
-          config.param_boiling_common,
+          config.param_common,
           config[this.$route.params.id ? 'param_boiling_' + this.$route.params.id : 'param_boiling_recommend']
         );
+        if (isAppend && this.hasNextPage) {
+          param = this.lodash.merge(param, { variables: { after: this.endCursor } });
+        }
         res = await axios.post(url, param, header);
-        if (res.data.data && res.data.data) {
+        if (res.data.data && (res.data.data.popularPinList || res.data.data.recommendedActivityFeed)) {
+          let data = res.data.data.popularPinList || res.data.data.recommendedActivityFeed;
+          if (isAppend && this.hasNextPage) {
+            //push可触发数组更新检测
+            this.articles.push(...data.items.edges);
+          } else {
+            this.articles = data.items.edges;
+          }
+          this.hasNextPage = data.items.pageInfo.hasNextPage;
+          this.endCursor = data.items.pageInfo.endCursor;
         }
       }
-
-      // if (isAppend && this.hasNextPage) {
-      //   article_type.variables.after = this.endCursor;
-      // }
-
-      // if (res.data.data.articleFeed && res.data.data.articleFeed.items && res.data.data.articleFeed.items.edges) {
-      //   if (isAppend && this.hasNextPage) {
-      //     //push可触发数组更新检测
-      //     this.articles.push(...res.data.data.articleFeed.items.edges);
-      //   } else {
-      //     this.articles = res.data.data.articleFeed.items.edges;
-      //   }
-      //   this.hasNextPage = res.data.data.articleFeed.items.pageInfo.hasNextPage;
-      //   this.endCursor = res.data.data.articleFeed.items.pageInfo.endCursor;
-      // } else {
-      //   //200 return error message
-      // }
     },
     calDate(date) {
-      let _date = new Date(date);
-      let _year = this.date.getFullYear() - _date.getFullYear();
-      let _month = this.date.getMonth() - _date.getMonth();
-      let _day = this.date.getDate() - _date.getDate();
-      let _hour = this.date.getHours() - _date.getHours();
-      let _minutes = this.date.getMinutes() - _date.getMinutes();
-      let _second = this.date.getSeconds() - _date.getSeconds();
+      let _date = this.date - new Date(date);
+      let _year = Math.floor(_date / (365 * 24 * 60 * 60 * 1000));
+      let _month = Math.floor(_date / (30 * 24 * 60 * 60 * 1000));
+      let _day = Math.floor(_date / (24 * 60 * 60 * 1000));
+      let _hour = Math.floor(_date / (60 * 60 * 1000));
+      let _minutes = Math.floor(_date / (60 * 1000));
+      let _second = Math.floor(_date / 1000);
       if (_year > 0) {
         return _year + '年前';
       }
       if (_month > 0) {
         return _month + '月前';
       }
-      if (_day > 0) {
+      if (_day >0) {
         return _day + '天前';
       }
       if (_hour > 0) {

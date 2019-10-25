@@ -33,6 +33,7 @@
               <span class="comment">{{item.commentCount}}评论</span>
             </div>
           </div>
+          <!--有多张图片，但是sidebar里只显示一张-->
           <img :src="item.pictures[0]" v-show="item.pictures[0]" alt class="screenshot" />
         </li>
       </ul>

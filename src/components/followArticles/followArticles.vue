@@ -100,20 +100,20 @@ export default {
       }
     },
     calDate(date) {
-      let _date = new Date(date);
-      let _year = this.date.getFullYear() - _date.getFullYear();
-      let _month = this.date.getMonth() - _date.getMonth();
-      let _day = this.date.getDate() - _date.getDate();
-      let _hour = this.date.getHours() - _date.getHours();
-      let _minutes = this.date.getMinutes() - _date.getMinutes();
-      let _second = this.date.getSeconds() - _date.getSeconds();
+      let _date = this.date - new Date(date);
+      let _year = Math.floor(_date / (365 * 24 * 60 * 60 * 1000));
+      let _month = Math.floor(_date / (30 * 24 * 60 * 60 * 1000));
+      let _day = Math.floor(_date / (24 * 60 * 60 * 1000));
+      let _hour = Math.floor(_date / (60 * 60 * 1000));
+      let _minutes = Math.floor(_date / (60 * 1000));
+      let _second = Math.floor(_date / 1000);
       if (_year > 0) {
         return _year + '年前';
       }
       if (_month > 0) {
         return _month + '月前';
       }
-      if (_day > 0) {
+      if (_day >0) {
         return _day + '天前';
       }
       if (_hour > 0) {
