@@ -65,7 +65,7 @@ export default {
       if (e.currentTarget.innerText != '') {
         e.currentTarget.parentNode.className = e.currentTarget.parentNode.className.replace(/ empty/g, '');
       } else {
-        e.currentTarget.parentNode.className.indexOf('empty') == -1 ? (e.currentTarget.parentNode.className += ' empty') : '';
+        !e.currentTarget.parentNode.className.includes('empty') ? (e.currentTarget.parentNode.className += ' empty') : '';
       }
     }
   }

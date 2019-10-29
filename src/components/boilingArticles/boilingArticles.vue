@@ -27,7 +27,7 @@ export default {
     articlePie
   },
   mounted() {
-    if (this.$route.params.id && ['recommend', 'hot'].indexOf(this.$route.params.id) == -1) {
+    if (this.$route.params.id && !['recommend', 'hot'].includes(this.$route.params.id)) {
       this.type = 1;
     }
     this.initData();

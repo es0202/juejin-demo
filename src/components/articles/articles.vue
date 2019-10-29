@@ -3,9 +3,9 @@
     <div class="header">
       <ul class="list-header">
         <!--路由query切换article类型-->
-        <li :class="type[1].indexOf($route.query.sort)>-1 ? 'list-item active' : 'list-item'" v-for="(type,index) in types" :key="index">
+        <li :class="type[1].includes($route.query.sort) ? 'list-item active' : 'list-item'" v-for="(type,index) in types" :key="index">
           <router-link :to="{path:$route.path,query:{sort: type[1][0]}}" @click.native="addActive">{{type[0]}}</router-link>
-          <el-select @change="changeType" v-model="selected" class="el-page" value="THREE_DAYS_HOTTEST" placeholder="3天内" v-if="index==2">
+          <el-select @change="changeType" v-model="selected" class="el-page" :value="$route.query.sort" v-if="index==2">
             <el-option value="THREE_DAYS_HOTTEST" label="3天内"></el-option>
             <el-option value="WEEKLY_HOTTEST" label="7天内"></el-option>
             <el-option value="MONTHLY_HOTTEST" label="30天内"></el-option>
@@ -101,6 +101,7 @@ export default {
     ...mapState(['categoryId'])
   },
   mounted() {
+    this.selected = this.$route.query.sort;
     //刷新页面也要记录当前categoryId，否则会显示推荐类别的文章
     //父组件中先判断categoryId是否存在再渲染当前组件
     this.initData();
@@ -172,7 +173,7 @@ export default {
       }
     },
     calDate(date) {
-     let _date = this.date - new Date(date);
+      let _date = this.date - new Date(date);
       let _year = Math.floor(_date / (365 * 24 * 60 * 60 * 1000));
       let _month = Math.floor(_date / (30 * 24 * 60 * 60 * 1000));
       let _day = Math.floor(_date / (24 * 60 * 60 * 1000));
@@ -185,7 +186,7 @@ export default {
       if (_month > 0) {
         return _month + '月前';
       }
-      if (_day >0) {
+      if (_day > 0) {
         return _day + '天前';
       }
       if (_hour > 0) {
@@ -214,13 +215,13 @@ export default {
     changeTag() {
       for (let i = 0; i < document.querySelector('.tag-wrap').children[0].children.length; ++i) {
         let item = document.querySelector('.tag-wrap').children[0].children[i];
-        if (item.className.indexOf('active') > -1) {
+        if (item.className.includes('active')) {
           this.changeCategory(item.getAttribute('data-id'));
         }
       }
     },
     hasLiked(id, e) {
-      if (e.currentTarget.className.indexOf('active') > -1) {
+      if (e.currentTarget.className.includes('active')) {
         e.currentTarget.className = 'item-action';
         e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) - 1;
       } else {
@@ -232,10 +233,7 @@ export default {
   watch: {
     $route(to, from) {
       this.changeTag();
-      //监听路由改变
-      if (to.query.sort == 'THREE_DAYS_HOTTEST') {
-        this.selected = 'THREE_DAYS_HOTTEST';
-      }
+      this.selected = to.query.sort;
       this.initData();
     }
   },

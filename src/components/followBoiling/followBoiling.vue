@@ -2,10 +2,10 @@
   <div class="boiling-articles">
     <div class="follow-article-wrap" v-for="(item,index) in articles" :key="index" @click="handle">
       <div class="article-item" v-if="item.node.action!='FOLLOW_USER'">
-        <div class="source-header" v-if="item.node.action.indexOf('LIKE')>-1">
+        <div class="source-header" v-if="item.node.action.includes('LIKE')">
           <span>你关注的</span>
           <span class="follower">{{item.node.actors[0].username}}</span>
-          <span>赞了这篇{{item.node.action.indexOf('ARTICLE')>-1?'文章':'沸点'}}</span>
+          <span>赞了这篇{{item.node.action.includes('ARTICLE')?'文章':'沸点'}}</span>
         </div>
         <div class="item-header">
           <div class="header-content">
@@ -27,7 +27,7 @@
           <div class="header-btn">关注</div>
         </div>
         <!--文章可点击-->
-        <router-link v-if="item.node.action.indexOf('ARTICLE')>-1" class="item-content" :to="item.node.targets['0'].originalUrl">
+        <router-link v-if="item.node.action.includes('ARTICLE')" class="item-content" :to="item.node.targets['0'].originalUrl">
           <div class="article-title">
             <span class="type" v-if="item.node.targets['0'].type=='post'">专栏</span>
             <span class="type" v-if="item.node.targets['0'].type=='article'">分享</span>
@@ -199,7 +199,7 @@ export default {
       }
     },
     hasLiked(id, e) {
-      if (e.currentTarget.className.indexOf('active') > -1) {
+      if (e.currentTarget.className.includes('active')) {
         e.currentTarget.className = 'action';
         e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) - 1;
       } else {
