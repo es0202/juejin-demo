@@ -28,16 +28,72 @@
       </div>
       <div class="header-more">
         <div class="header-follow" v-show="!user.viewerIsFollowing">关注</div>
+        <svg class="more-icon">
+          <use xlink:href="#more" />
+        </svg>
       </div>
     </div>
-    <!---->
+    <!--内容-->
+    <div class="pin-content">
+      <div class="content">{{(content.length>170 && content.split('\n').length>6)
+        ?content.split('\n').slice(0,6).reduce((x,y)=>(x+'\n'+y))+'...'
+        :content}}</div>
+      <div class="limit-box">
+        <div
+          class="limit-btn"
+          v-show="content.length>170&&content.split('\n').length>5"
+          @click="toggleContent(content,$event)"
+        >展开</div>
+      </div>
+    </div>
+    <!--topic标签-->
+    <div class="pin-topic">
+      <a class="topic-title" :href="'/topic/'+topic.id" v-if="topic">{{topic.title}}</a>
+    </div>
+    <!--赞评信息-->
+    <div class="pie-action">
+      <div :class="viewerHasLiked?'action active':'action'" @click.prevent="hasLiked(item.node.targets[0].id,$event)">
+        <svg class="like-icon">
+          <use xlink:href="#like2" />
+        </svg>
+        <span>{{likeCount}}</span>
+      </div>
+      <!--点过赞的才有active样式-->
+      <div class="action">
+        <svg class="like-icon">
+          <use xlink:href="#comment2" />
+        </svg>
+        <span>{{commentsCount}}</span>
+      </div>
+      <div class="action">
+        <svg class="like-icon">
+          <use xlink:href="#share" />
+        </svg>
+        <span>分享</span>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 export default {
-  props: ['user', 'date'],
+  props: ['user', 'date', 'viewerHasLiked', 'likeCount', 'commentsCount','topic','content'],
   mounted() {
-    console.log(this.date);
+    // console.log(this.date);
+  },
+  methods:{
+    toggleContent(content, e) {
+      if (e.currentTarget.parentElement.previousElementSibling.innerHTML == content) {
+        e.currentTarget.parentElement.previousElementSibling.innerHTML =
+          content
+            .split('\n')
+            .slice(0, 6)
+            .reduce((x, y) => x + '\n' + y) + '...';
+        e.currentTarget.innerText = '展开';
+      } else {
+        e.currentTarget.parentElement.previousElementSibling.innerHTML = content;
+        e.currentTarget.innerText = '收回';
+      }
+    },
   }
 };
 </script>
@@ -96,6 +152,8 @@ export default {
       }
     }
     .header-more {
+      display: flex;
+      align-items: center;
       .header-follow {
         width: 55px;
         height: 26px;
@@ -108,45 +166,11 @@ export default {
         border-radius: 2px;
         opacity: 0.8;
       }
-    }
-  }
-  .item-content {
-    margin-left: 56px;
-    padding: 6px 20px 10px;
-    display: block;
-    .article-title {
-      .type {
-        font-size: 13px;
-        font-weight: 500;
-        color: #007fff;
-        background-color: #e5f2ff;
-        border-radius: 2px;
-        margin-right: 10px;
-        padding: 3px 6px;
-        display: inline-block;
-        vertical-align: middle;
-      }
-      h3 {
-        font-size: 17px;
-        color: #17181a;
-        line-height: 1.5;
-        vertical-align: middle;
-        display: inline;
-      }
-    }
-    .article-content {
-      display: flex;
-      align-items: center;
-      .text {
-        font-size: 15px;
-        margin: 4px 16px 0 0;
-        line-height: 1.53;
-        color: #5c6066;
-      }
-      img {
-        width: 65px;
-        height: 65px;
-        flex: 0 0 auto;
+      .more-icon {
+        width: 24px;
+        height: 24px;
+        fill: #b8c1cc;
+        margin-left: 16px;
       }
     }
   }
@@ -204,7 +228,7 @@ export default {
       display: inline-block;
     }
   }
-  .action-box {
+  .pie-action {
     display: flex;
     align-items: center;
     justify-content: center;

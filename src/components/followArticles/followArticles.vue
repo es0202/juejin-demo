@@ -127,7 +127,7 @@ export default {
       }
     },
     hasLiked(id, e) {
-      if (e.currentTarget.className.indexOf('active') > -1) {
+      if (e.currentTarget.className.includes('active')) {
         //已经点赞
         //绕不过cros的预检
         // axios

@@ -73,7 +73,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .editor-wrap {
-  padding: 16px 20px 10px 20px;
+  padding: 16px 20px 0px 20px;
   background: #fff;
   margin-bottom: 8px;
   &.empty {

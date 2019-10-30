@@ -1,11 +1,7 @@
 <template>
   <div class="boiling-articles">
-    <articlePie
-      v-for="(item,index) in articles"
-      :key="index"
-      :user="item.node.user||item.node.targets[0].user"
-      :date="calDate(item.node.createdAt||item.node.targets[0].createdAt)"
-    ></articlePie>
+    <articlePie v-for="(item,index) in articles" :key="index" v-bind="param(item)"></articlePie>
+    <!--viewerHasLiked为boolean类型，本是判断item.node.viewerHasLiked是否存在，但值为false去判断不存在的item.node.targets[0]-->
   </div>
 </template>
 <script>
@@ -59,7 +55,12 @@ export default {
         );
         res = await axios.get(url, { params: param });
         if (res.data.d && res.data.d.list) {
-          this.articles = this.data.d.list;
+          if (this.page > 0) {
+            this.articles.push(...res.data.d.list);
+          } else {
+            this.articles = res.data.d.list;
+          }
+        } else {
         }
       } else {
         url = '/api/query';
@@ -83,6 +84,7 @@ export default {
           }
           this.hasNextPage = data.items.pageInfo.hasNextPage;
           this.endCursor = data.items.pageInfo.endCursor;
+        } else {
         }
       }
     },
@@ -100,7 +102,7 @@ export default {
       if (_month > 0) {
         return _month + '月前';
       }
-      if (_day >0) {
+      if (_day > 0) {
         return _day + '天前';
       }
       if (_hour > 0) {
@@ -112,10 +114,45 @@ export default {
       if (_second > 0) {
         return _second + '秒前';
       }
+    },
+    param(item) {
+      //传prop
+      let user, date, viewerHasLiked, likeCount, commentsCount, topic, content;
+      if (this.$route.params.id && this.$route.params.id == 'recommend') {
+        user = item.node.targets[0].user;
+        date = this.calDate(item.node.targets[0].createdAt);
+        viewerHasLiked = item.node.targets[0].viewerHasLiked;
+        likeCount = item.node.targets[0].likeCount;
+        commentsCount = item.node.targets[0].commentCount;
+        topic = item.node.targets[0].topic;
+        content = item.node.targets[0].content;
+      } else if (this.$route.params.id && this.$route.params.id == 'hot') {
+        user = item.node.user;
+        date = this.calDate(item.node.createdAt);
+        viewerHasLiked = item.node.viewerHasLiked;
+        likeCount = item.node.likeCount;
+        commentsCount = item.node.commentCount;
+        topic = item.node.topic;
+        content = item.node.content;
+      } else {
+        user = item.user;
+        date = this.calDate(item.createdAt);
+        viewerHasLiked = item.isLiked;
+        likeCount = item.likedCount;
+        commentsCount = item.commentCount;
+        topic = item.topic;
+        content = item.content;
+      }
+      return { user, date, viewerHasLiked, likeCount, commentsCount, topic, content };
     }
   },
   watch: {
     $route(to, from) {
+      //防止切换路由使用前一次的articles渲染articlePie组件
+      this.articles = [];
+      if (this.$route.params.id && !['recommend', 'hot'].includes(this.$route.params.id)) {
+        this.type = 1;
+      }
       this.initData();
     }
   },

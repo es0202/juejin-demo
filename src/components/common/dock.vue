@@ -26,12 +26,12 @@ export default {
         { title: '热门', path: 'hot' },
         { title: '关注', path: 'follow' },
         { title: '开源推荐', path: '5c09ea2b092dcb42c740fe73' },
-        { title: '内推招聘', path: 'follow' },
-        { title: '掘金相亲', path: 'follow' },
-        { title: '上班摸鱼', path: 'follow' },
-        { title: '应用安利', path: 'follow' },
-        { title: '开发工具', path: 'follow' },
-        { title: 'New资讯', path: 'follow' }
+        { title: '内推招聘', path: '5abb61e1092dcb4620ca3322' },
+        { title: '掘金相亲', path: '5abcaa67092dcb4620ca335c' },
+        { title: '上班摸鱼', path: '5c106be9092dcb2cc5de7257' },
+        { title: '应用安利', path: '5b514af1092dcb61bd72800d' },
+        { title: '开发工具', path: '5abb67d2092dcb4620ca3324' },
+        { title: 'New资讯', path: '5c46a17f092dcb4737217152' }
       ],
       beforeScroll: ''
     };
