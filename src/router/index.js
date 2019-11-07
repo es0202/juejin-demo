@@ -40,7 +40,7 @@ export default new Router({
       component: boiling,
       children:[{
         path:'',
-        component:boilingArticle
+        redirect:'recommend',
       },{
         path:'follow',
         component:followBoiling

@@ -13,6 +13,11 @@ import svgIcon from './components/common/svg';
 import suspension from './components/common/suspension';
 export default {
   name: 'App',
+  components: {
+    headers,
+    svgIcon,
+    suspension
+  },
   data() {
     return {
       isShow: false
@@ -43,11 +48,6 @@ export default {
         that.isShow = false;
       }
     });
-  },
-  components: {
-    headers,
-    svgIcon,
-    suspension
   }
 };
 </script>

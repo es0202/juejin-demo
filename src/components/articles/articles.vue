@@ -50,13 +50,13 @@
             <p class="title-row">{{item.node.title}}</p>
             <div class="action-row">
               <ul class="list-action">
-                <li :class="item.node.viewerHasLiked?'item-action active':'item-action'" @click.prevent="hasLiked(item.node.id,$event)">
+                <li :class="item.node.viewerHasLiked?'action active':'action'" @click.prevent="hasLiked(item.node.id,$event)">
                   <svg class="like-icon">
                     <use xlink:href="#like" />
                   </svg>
                   <span class="count">{{item.node.likeCount}}</span>
                 </li>
-                <li class="item-action">
+                <li class="action">
                   <svg class="comment-icon">
                     <use xlink:href="#comment" />
                   </svg>
@@ -81,7 +81,9 @@
 <script>
 import config from '../../../config/http';
 import { mapState, mapActions } from 'vuex';
+import mixin from '../common/mixin'
 export default {
+  mixins:[mixin],
   data() {
     return {
       articles: [],
@@ -106,6 +108,9 @@ export default {
     //父组件中先判断categoryId是否存在再渲染当前组件
     this.initData();
     window.addEventListener('scroll', this.scrollEvent);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
   },
   methods: {
     ...mapActions(['changeCategory']),
@@ -172,33 +177,6 @@ export default {
         //200 return error message
       }
     },
-    calDate(date) {
-      let _date = this.date - new Date(date);
-      let _year = Math.floor(_date / (365 * 24 * 60 * 60 * 1000));
-      let _month = Math.floor(_date / (30 * 24 * 60 * 60 * 1000));
-      let _day = Math.floor(_date / (24 * 60 * 60 * 1000));
-      let _hour = Math.floor(_date / (60 * 60 * 1000));
-      let _minutes = Math.floor(_date / (60 * 1000));
-      let _second = Math.floor(_date / 1000);
-      if (_year > 0) {
-        return _year + '年前';
-      }
-      if (_month > 0) {
-        return _month + '月前';
-      }
-      if (_day > 0) {
-        return _day + '天前';
-      }
-      if (_hour > 0) {
-        return _hour + '小时前';
-      }
-      if (_minutes > 0) {
-        return _minutes + '分钟前';
-      }
-      if (_second > 0) {
-        return _second + '秒前';
-      }
-    },
     addActive(e) {
       e.target.parentNode.parentNode.childNodes.forEach(e => {
         e.className = 'list-item';
@@ -219,15 +197,6 @@ export default {
           this.changeCategory(item.getAttribute('data-id'));
         }
       }
-    },
-    hasLiked(id, e) {
-      if (e.currentTarget.className.includes('active')) {
-        e.currentTarget.className = 'item-action';
-        e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) - 1;
-      } else {
-        e.currentTarget.className = 'item-action active';
-        e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) + 1;
-      }
     }
   },
   watch: {
@@ -236,9 +205,6 @@ export default {
       this.selected = to.query.sort;
       this.initData();
     }
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>
@@ -342,7 +308,7 @@ export default {
             .list-action {
               display: flex;
               height: 26px;
-              .item-action {
+              .action {
                 border: 1px solid #edeeef;
                 display: flex;
                 align-items: center;

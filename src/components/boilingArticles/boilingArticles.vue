@@ -1,13 +1,26 @@
 <template>
   <div class="boiling-articles">
+    <child :date="date"></child>
     <articlePie v-for="(item,index) in articles" :key="index" v-bind="param(item)"></articlePie>
-    <!--viewerHasLiked为boolean类型，本是判断item.node.viewerHasLiked是否存在，但值为false去判断不存在的item.node.targets[0]-->
   </div>
 </template>
 <script>
 import config from '../../../config/http';
 import articlePie from '../common/articlePie';
+import mixin from '../common/mixin'
+import Vue from 'vue'
+Vue.component("child", {
+    template: "<div>child</div>",
+    inheritAttrs:false,
+    mounted(){
+      // console.log(this.$attrs)
+    }
+});
 export default {
+  components: {
+    articlePie
+  },
+  mixins:[mixin],
   data() {
     return {
       articles: [],
@@ -16,18 +29,35 @@ export default {
       endCursor: '',
       loadMore: false, //防止持续请求数据
       type: 0, //dock前三个类别
-      page: 0
+      page: 0,
     };
   },
-  components: {
-    articlePie
-  },
-  mounted() {
+  created() {
     if (this.$route.params.id && !['recommend', 'hot'].includes(this.$route.params.id)) {
       this.type = 1;
     }
     this.initData();
     window.addEventListener('scroll', this.scrollEvent);
+  },
+  mounted() {
+    // this.$forceUpdate()
+  },
+  updated(){
+    //强制刷新才可访问到$children
+    // console.table(this.$children);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
+  },
+  watch: {
+    $route(to, from) {
+      //防止切换路由使用前一次的articles渲染articlePie组件
+      this.articles = [];
+      if (this.$route.params.id && !['recommend', 'hot'].includes(this.$route.params.id)) {
+        this.type = 1;
+      }
+      this.initData();
+    }
   },
   methods: {
     scrollEvent() {
@@ -88,33 +118,6 @@ export default {
         }
       }
     },
-    calDate(date) {
-      let _date = this.date - new Date(date);
-      let _year = Math.floor(_date / (365 * 24 * 60 * 60 * 1000));
-      let _month = Math.floor(_date / (30 * 24 * 60 * 60 * 1000));
-      let _day = Math.floor(_date / (24 * 60 * 60 * 1000));
-      let _hour = Math.floor(_date / (60 * 60 * 1000));
-      let _minutes = Math.floor(_date / (60 * 1000));
-      let _second = Math.floor(_date / 1000);
-      if (_year > 0) {
-        return _year + '年前';
-      }
-      if (_month > 0) {
-        return _month + '月前';
-      }
-      if (_day > 0) {
-        return _day + '天前';
-      }
-      if (_hour > 0) {
-        return _hour + '小时前';
-      }
-      if (_minutes > 0) {
-        return _minutes + '分钟前';
-      }
-      if (_second > 0) {
-        return _second + '秒前';
-      }
-    },
     param(item) {
       //传prop
       let user, date, viewerHasLiked, likeCount, commentsCount, topic, content;
@@ -146,18 +149,5 @@ export default {
       return { user, date, viewerHasLiked, likeCount, commentsCount, topic, content };
     }
   },
-  watch: {
-    $route(to, from) {
-      //防止切换路由使用前一次的articles渲染articlePie组件
-      this.articles = [];
-      if (this.$route.params.id && !['recommend', 'hot'].includes(this.$route.params.id)) {
-        this.type = 1;
-      }
-      this.initData();
-    }
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.scrollEvent);
-  }
 };
 </script>

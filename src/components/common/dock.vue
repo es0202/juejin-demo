@@ -2,11 +2,12 @@
   <div class="dock-wrap">
     <div class="dock-fixed">
       <ul class="nav-list">
+        <!--follow不是以param.id传的-->
         <li
           :class="$route.params.id
       ?($route.params.id==item.path
         ?'nav-item active':'nav-item')
-      :(index==0?'nav-item active':'nav-item')"
+      :(index==2?'nav-item active':'nav-item')"
           v-for="(item,index) in list"
           :key="index"
           @click="addActive"
@@ -40,6 +41,9 @@ export default {
     this.beforeScroll = window.scrollY;
     window.addEventListener('scroll', this.scrollEvent);
   },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
+  },
   methods: {
     scrollEvent() {
       //header显示sticky-block margin-top加60px
@@ -59,9 +63,6 @@ export default {
       }
       e.currentTarget.className = 'nav-item active';
     }
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>

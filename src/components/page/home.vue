@@ -16,13 +16,13 @@ import tag from '../header/tag';
 import authors from '../common/authors';
 import { mapState } from 'vuex';
 export default {
-  computed: {
-    ...mapState(['categoryId'])
-  },
   components: {
     tag,
     authors
-  }
+  },
+  computed: {
+    ...mapState(['categoryId'])
+  },
 };
 </script>
 <style lang="less" scoped>

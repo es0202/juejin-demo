@@ -14,14 +14,14 @@ import dock from '../common/dock';
 import config from '../../../config/http';
 import editor from '../common/boilngEditor';
 export default {
-  mounted() {
-
-  },
   components: {
     sidebar,
     dock,
     editor
-  }
+  },
+  mounted() {
+// debugger;
+  },
 };
 </script>
 <style lang="less" scoped>

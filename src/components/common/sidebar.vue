@@ -62,6 +62,9 @@ export default {
     this.initData();
     window.addEventListener('scroll', this.scrollEvent);
   },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
+  },
   methods: {
     scrollEvent() {
       if (window.scrollY > document.querySelector('.sidebar-wrap').clientHeight) {
@@ -84,9 +87,6 @@ export default {
         this.recommends = res.data.d.list.slice(0, 3);
       }
     }
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>

@@ -67,6 +67,9 @@ export default {
     this.beforeScroll = window.scrollY;
     window.addEventListener('scroll', this.scrollEvent);
   },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
+  },
   methods: {
     scrollEvent() {
       //滚动超过header+tag+author高度，sticky-block显示
@@ -97,9 +100,6 @@ export default {
         this.authors.push(res.data.data.recommendationCard.items[arr[2]]);
       }
     }
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>

@@ -119,7 +119,7 @@ Cannot assign to read only property 'exports' of object '#<Object>' at Module../
 
 #### 点赞、取消点赞为 put/delete 方法，绕不过 cors 预检，只做了动态样式，没法调用掘金的接口
 
-#### TODO 组件细化，沸点文章组件/点赞、评论、分享 action-box 组件
+#### background-image修改为img才可确保图片请求不会403
 
 #### take care '/home'和'/home/recommend'相关判断
 

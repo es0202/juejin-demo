@@ -37,6 +37,9 @@ export default {
     this.beforeScroll = window.scrollY;
     window.addEventListener('scroll', this.scrollEvent);
   },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
+  },
   methods: {
     ...mapActions(['changeCategory']),
     scrollEvent() {
@@ -66,9 +69,6 @@ export default {
         }
       }
     }
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>

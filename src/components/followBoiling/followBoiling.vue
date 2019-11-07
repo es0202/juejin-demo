@@ -17,10 +17,12 @@
               <div class="author-name">{{item.node.targets[0].user.username}}</div>
               <!--TODO calDate前面的字段过长省略号显示-->
               <div class="author-info">
-                {{item.node.targets[0].user.jobTitle
-                +(item.node.targets[0].user.company ? ' @ '+item.node.targets[0].user.company : '')
-                +(item.node.targets[0].user.jobTitle||item.node.targets[0].user.company ? ' · ' : '')
-                +calDate(item.node.targets['0'].createdAt)}}
+                <div class="info">
+                  {{item.node.actors[0].jobTitle
+                  +(item.node.actors[0].company ? ' @ '+item.node.actors[0].company : '')}}
+                </div>
+                <div v-if="item.node.actors[0].jobTitle||user.company" class="dot">·</div>
+                <div class="time">{{calDate(item.node.targets['0'].createdAt)}}</div>
               </div>
             </div>
           </div>
@@ -44,13 +46,11 @@
         <!--沸点不可点击-->
         <div v-else>
           <div class="pin-content">
-            <div class="content">{{(item.node.targets[0].content.length>170 && item.node.targets[0].content.split('\n').length>6)
-              ?item.node.targets[0].content.split('\n').slice(0,6).reduce((x,y)=>(x+'\n'+y))+'...'
-              :item.node.targets[0].content}}</div>
+            <div class="content">{{showContent(item.node.targets[0].content)}}</div>
             <div class="limit-box">
               <div
                 class="limit-btn"
-                v-show="item.node.targets[0].content.length>170&&item.node.targets[0].content.split('\n').length>5"
+                v-show="item.node.targets[0].content.split('\n').length>6"
                 @click="toggleContent(item.node.targets[0].content,$event)"
               >展开</div>
             </div>
@@ -105,8 +105,10 @@
               </div>
               <!--TODO calDate前面的字段过长省略号显示-->
               <div class="author-info">
-                {{item.node.actors[0].jobTitle
-                +(item.node.actors[0].company ? ' @ '+item.node.actors[0].company : '')}}
+                <div class="info">
+                  {{item.node.actors[0].jobTitle
+                  +(item.node.actors[0].company ? ' @ '+item.node.actors[0].company : '')}}
+                </div>
               </div>
             </li>
           </ul>
@@ -117,8 +119,10 @@
 </template>
 <script>
 import config from '../../../config/http';
+import mixin from '../common/mixin';
 
 export default {
+  mixins: [mixin],
   data() {
     return {
       articles: [],
@@ -132,6 +136,9 @@ export default {
   mounted() {
     this.initData();
     window.addEventListener('scroll', this.scrollEvent);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
   },
   methods: {
     scrollEvent() {
@@ -171,42 +178,6 @@ export default {
         //200 return error message
       }
     },
-    calDate(date) {
-      let _date = this.date - new Date(date);
-      let _year = Math.floor(_date / (365 * 24 * 60 * 60 * 1000));
-      let _month = Math.floor(_date / (30 * 24 * 60 * 60 * 1000));
-      let _day = Math.floor(_date / (24 * 60 * 60 * 1000));
-      let _hour = Math.floor(_date / (60 * 60 * 1000));
-      let _minutes = Math.floor(_date / (60 * 1000));
-      let _second = Math.floor(_date / 1000);
-      if (_year > 0) {
-        return _year + '年前';
-      }
-      if (_month > 0) {
-        return _month + '月前';
-      }
-      if (_day > 0) {
-        return _day + '天前';
-      }
-      if (_hour > 0) {
-        return _hour + '小时前';
-      }
-      if (_minutes > 0) {
-        return _minutes + '分钟前';
-      }
-      if (_second > 0) {
-        return _second + '秒前';
-      }
-    },
-    hasLiked(id, e) {
-      if (e.currentTarget.className.includes('active')) {
-        e.currentTarget.className = 'action';
-        e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) - 1;
-      } else {
-        e.currentTarget.className = 'action active';
-        e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) + 1;
-      }
-    },
     toggleContent(content, e) {
       if (e.currentTarget.parentElement.previousElementSibling.innerHTML == content) {
         e.currentTarget.parentElement.previousElementSibling.innerHTML =
@@ -223,12 +194,10 @@ export default {
     handle(e) {
       console.log(e.target);
     }
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>
+<style lang="less" src="../../../static/css/action.less" scoped />//自闭合
 <style lang="less" scoped>
 .boiling-articles {
   .article-item,
@@ -287,6 +256,17 @@ export default {
             font-size: 13px;
             color: #8a9aa9;
             margin-top: 2px;
+            display: flex;
+            align-items: center;
+            .info {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 288px;
+            }
+            .dot {
+              margin: 0 6px;
+            }
           }
         }
       }
@@ -405,46 +385,6 @@ export default {
       border-top: 1px solid #ebebeb;
       margin-top: 2px;
       height: 34px;
-      .action {
-        flex: 1;
-        position: relative;
-        text-align: center;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .like-icon {
-          width: 18px;
-          height: 18px;
-          fill: none;
-          stroke: #8a93a0;
-        }
-        span {
-          font-size: 13px;
-          color: #8a93a0;
-          line-height: 18px;
-          margin-left: 4px;
-        }
-        &:not(:last-child):after {
-          content: '';
-          position: absolute;
-          top: 50%;
-          right: 0;
-          margin-top: -12px;
-          width: 1px;
-          height: 24px;
-          background-color: #ebebeb;
-        }
-        &.active {
-          span {
-            color: #37c700;
-          }
-          .like-icon {
-            stroke: #37c700;
-            fill: #37c700;
-          }
-        }
-      }
     }
   }
   .follow-user {

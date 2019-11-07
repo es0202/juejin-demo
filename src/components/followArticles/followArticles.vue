@@ -12,10 +12,9 @@
               <div class="author-name">{{item.node.targets['0'].user.username}}</div>
               <!--TODO calDate前面的字段过长省略号显示-->
               <div class="author-info">
-                {{item.node.targets[0].user.jobTitle
-                +(item.node.targets[0].user.company ? ' @ '+item.node.targets[0].user.company : '')
-                +(item.node.targets[0].user.jobTitle||item.node.targets[0].user.company ? ' · ' : '')
-                +calDate(item.node.targets['0'].createdAt)}}
+                <div class="info">{{authorInfo(item.node.targets[0].user.jobTitle,item.node.targets[0].user.company,item.node.targets[0].createdAt)}}</div>
+                <div v-if="item.node.targets[0].user.jobTitle||item.node.targets[0].user.company" class="dot">·</div>
+                <div class="time">{{calDate(item.node.targets[0].createdAt)}}</div>
               </div>
             </li>
           </ul>
@@ -57,19 +56,24 @@
 </template>
 <script>
 import config from '../../../config/http';
+import mixin from '../common/mixin';
 export default {
+  mixins: [mixin],
   data() {
     return {
       followArticles: [],
       hasNextPage: '',
       endCursor: '',
       date: new Date(),
-      loadMore: false //防止持续请求数据
+      loadMore: false, //防止持续请求数据
     };
   },
   mounted() {
     this.initData();
     window.addEventListener('scroll', this.scrollEvent);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollEvent);
   },
   methods: {
     scrollEvent() {
@@ -98,65 +102,11 @@ export default {
         this.hasNextPage = res.data.data.followingArticleFeed.items.pageInfo.hasNextPage;
         this.endCursor = res.data.data.followingArticleFeed.items.pageInfo.endCursor;
       }
-    },
-    calDate(date) {
-      let _date = this.date - new Date(date);
-      let _year = Math.floor(_date / (365 * 24 * 60 * 60 * 1000));
-      let _month = Math.floor(_date / (30 * 24 * 60 * 60 * 1000));
-      let _day = Math.floor(_date / (24 * 60 * 60 * 1000));
-      let _hour = Math.floor(_date / (60 * 60 * 1000));
-      let _minutes = Math.floor(_date / (60 * 1000));
-      let _second = Math.floor(_date / 1000);
-      if (_year > 0) {
-        return _year + '年前';
-      }
-      if (_month > 0) {
-        return _month + '月前';
-      }
-      if (_day >0) {
-        return _day + '天前';
-      }
-      if (_hour > 0) {
-        return _hour + '小时前';
-      }
-      if (_minutes > 0) {
-        return _minutes + '分钟前';
-      }
-      if (_second > 0) {
-        return _second + '秒前';
-      }
-    },
-    hasLiked(id, e) {
-      if (e.currentTarget.className.includes('active')) {
-        //已经点赞
-        //绕不过cros的预检
-        // axios
-        //   .delete('https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/' + id, config.header1)
-        //   .then(v => {
-        e.currentTarget.className = 'action';
-        e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) - 1;
-        // })
-        // .catch(err => {
-        //   console.log(err);
-        // });
-      } else {
-        // axios
-        //   .put('https://user-like-wrapper-ms.juejin.im/v1/user/like/entry/' + id, config.header1)
-        //   .then(v => {
-        e.currentTarget.className = 'action active';
-        e.currentTarget.children[1].innerText = Number(e.currentTarget.children[1].innerText) + 1;
-        // })
-        // .catch(err => {
-        //   console.log(err);
-        // });
-      }
     }
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.scrollEvent);
   }
 };
 </script>
+<style lang="less" src="../../../static/css/action.less" scoped />
 <style lang="less" scoped>
 .article-item {
   background: #fff;
@@ -187,6 +137,17 @@ export default {
           font-size: 13px;
           color: #8a9aa9;
           margin-top: 2px;
+          display: flex;
+          align-items: center;
+          .info {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 288px;
+          }
+          .dot {
+            margin: 0 6px;
+          }
         }
       }
     }
@@ -230,46 +191,6 @@ export default {
     border-top: 1px solid #ebebeb;
     margin-top: 2px;
     height: 34px;
-    .action {
-      flex: 1;
-      position: relative;
-      text-align: center;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .like-icon {
-        width: 18px;
-        height: 18px;
-        fill: none;
-        stroke: #8a93a0;
-      }
-      span {
-        font-size: 13px;
-        color: #8a93a0;
-        line-height: 18px;
-        margin-left: 4px;
-      }
-      &:not(:last-child):after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        right: 0;
-        margin-top: -12px;
-        width: 1px;
-        height: 24px;
-        background-color: #ebebeb;
-      }
-      &.active {
-        span {
-          color: #37c700;
-        }
-        .like-icon {
-          stroke: #37c700;
-          fill: #37c700;
-        }
-      }
-    }
   }
 }
 </style>
