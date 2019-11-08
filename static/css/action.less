@@ -1,0 +1,41 @@
+//action公用样式
+.action {
+  flex: 1;
+  position: relative;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .like-icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: #8a93a0;
+  }
+  span {
+    font-size: 13px;
+    color: #8a93a0;
+    line-height: 18px;
+    margin-left: 4px;
+  }
+  &:not(:last-child):after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -12px;
+    width: 1px;
+    height: 24px;
+    background-color: #ebebeb;
+  }
+  &.active {
+    span {
+      color: #37c700;
+    }
+    .like-icon {
+      stroke: #37c700;
+      fill: #37c700;
+    }
+  }
+}
