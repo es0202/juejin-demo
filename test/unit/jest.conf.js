@@ -27,5 +27,5 @@ module.exports = {
     '!src/router/index.js',
     '!**/node_modules/**'
   ],
-  testURL:"http://localhosst/"
+  testURL:"http://localhost/"//est suite failed to run SecurityError: localStorage is not available for opaque origins
 }

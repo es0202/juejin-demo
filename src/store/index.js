@@ -5,12 +5,14 @@ import actions from './actions'
 
 Vue.use(Vuex)
 
-const state={
-  categoryId:null //区分 推荐标签的categoryId'' 设为null
+const state = {
+  categoryId: null, //区分 推荐标签的categoryId'' 设为null
+  logined: false, //默认未登录
+  userinfo: {}
 }
 
 export default new Vuex.Store({
-	state,
-	actions,
-	mutations,
+  state,
+  actions,
+  mutations,
 })

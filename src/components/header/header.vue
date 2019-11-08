@@ -44,21 +44,129 @@
         <svg class="tip-icon">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#tip" />
         </svg>
-        <svg class="user-icon">
-          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user" />
-        </svg>
+        <div class="avatar">
+          <div style="overflow:hidden;width:36px;height:36px">
+            <transition name="fade">
+              <!--相同标签v-if/v-else最好使用key-->
+              <img
+                id="avatar"
+                v-if="$store.state.logined&&$store.state.userinfo!={}"
+                key="user"
+                :src="$store.state.userinfo.avatarLarge+'?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1'"
+                alt="头像"
+                class="user-icon"
+              />
+              <svg v-else key="visitor" class="user-icon" @click="showPanel">
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user" />
+              </svg>
+            </transition>
+          </div>
+          <ul class="nav-menu" v-show="showMenu">
+            <div class="nav-item-group">
+              <li class="nav-item">
+                <svg class="icon">
+                  <use xlink:href="#writeArticle" />
+                </svg>
+                <span class="text">写文章</span>
+              </li>
+              <li class="nav-item">
+                <svg class="icon">
+                  <use xlink:href="#draft" />
+                </svg>
+                <span class="text">草稿</span>
+              </li>
+            </div>
+            <div class="nav-item-group">
+              <li class="nav-item">
+                <svg class="icon">
+                  <use xlink:href="#homePage" />
+                </svg>
+                <span class="text">我的主页</span>
+              </li>
+              <li class="nav-item">
+                <svg class="icon">
+                  <use xlink:href="#like" />
+                </svg>
+                <span class="text">我赞过的</span>
+              </li>
+              <li class="nav-item">
+                <svg class="icon">
+                  <use xlink:href="#collect" />
+                </svg>
+                <span class="text">我的收藏集</span>
+              </li>
+              <li class="nav-item">
+                <svg class="icon">
+                  <use xlink:href="#purchased" />
+                </svg>
+                <span class="text">已购</span>
+              </li>
+              <li class="nav-item">
+                <svg class="icon">
+                  <use xlink:href="#tag" />
+                </svg>
+                <span class="text">标签管理</span>
+              </li>
+            </div>
+            <div class="nav-item-group">
+              <li class="nav-item">
+                <svg class="icon">
+                  <use xlink:href="#setting" />
+                </svg>
+                <span class="text">设置</span>
+              </li>
+              <li class="nav-item">
+                <svg class="icon">
+                  <use xlink:href="#about" />
+                </svg>
+                <span class="text">关于</span>
+              </li>
+            </div>
+            <div class="nav-item-group">
+              <li class="nav-item">
+                <svg class="icon">
+                  <use xlink:href="#logout" />
+                </svg>
+                <span class="text">登出</span>
+              </li>
+            </div>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-// export default {
-//   data() {
-//     return{};
-//   },
-// };
+export default {
+  data() {
+    return {
+      showMenu: false
+    };
+  },
+  mounted() {
+    document.documentElement.addEventListener('click', e=> {
+      if (e.target.id == 'avatar') {
+        this.showMenu = !this.showMenu;
+      }else{
+        this.showMenu=false;
+      }
+    });
+  },
+  methods: {
+    showPanel(e) {
+      document.documentElement.querySelector('.auth-wrapper').style.display = '';
+    },
+  }
+};
 </script>
 <style lang="less" scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 .wh(@width,@height) {
   width: @width;
   height: @height;
@@ -73,8 +181,9 @@
 }
 .user-icon {
   .wh(36px, 36px);
-  padding-left: 10px;
   fill: #d8d8d8;
+  border-radius: 50%;
+  display: inline-block;
 }
 .header-wrap {
   z-index: 200;
@@ -163,6 +272,45 @@
           .el-icon-caret-bottom {
             padding: 0 2px;
             font-size: 6px;
+          }
+        }
+      }
+      .avatar {
+        .wh(36px, 36px);
+        // overflow: hidden;
+        padding-left: 10px;
+        position: relative;
+        .nav-menu {
+          position: absolute;
+          width: 157px;
+          right: 0;
+          top: 48px;
+          transform: translateX(0);
+          background: #fff;
+          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+          border: 1px solid rgba(177, 180, 185, 0.45);
+          border-radius: 4px;
+          .nav-item-group {
+            padding: 12px 0;
+            & + & {
+              border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+            }
+            .nav-item {
+              display: flex;
+              align-items: center;
+              padding: 6px 12px;
+              .icon {
+                width: 18px;
+                height: 18px;
+                margin-right: 10px;
+                fill: #b2bac2;
+              }
+              .text {
+                font-size: 16px;
+                color: #71777c;
+                line-height: 20px;
+              }
+            }
           }
         }
       }

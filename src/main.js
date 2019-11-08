@@ -12,6 +12,12 @@ Vue.config.productionTip = false
 Vue.prototype.lodash = lodash
 //全局使用lodash 无需每个组件中Import
 
+router.beforeEach((to, from, next) => {
+  //全局钩子,每个路由都执行
+  console.log('1')
+  next()
+})
+
 /* eslint-disable no-new */
 window.vm=new Vue({
   el: '#app',

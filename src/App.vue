@@ -3,6 +3,7 @@
     <headers></headers>
     <router-view></router-view>
     <svg-icon></svg-icon>
+    <auth v-if="!logined"></auth>
     <suspension v-show="isShow"></suspension>
   </div>
 </template>
@@ -11,17 +12,23 @@
 import headers from './components/header/header';
 import svgIcon from './components/common/svg';
 import suspension from './components/common/suspension';
+import auth from './components/auth/auth';
+import { mapState, mapActions } from 'vuex';
 export default {
   name: 'App',
   components: {
     headers,
     svgIcon,
-    suspension
+    suspension,
+    auth
   },
   data() {
     return {
       isShow: false
     };
+  },
+  computed: {
+    ...mapState(['logined'])
   },
   mounted() {
     const that = this;
