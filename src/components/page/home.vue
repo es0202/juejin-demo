@@ -2,8 +2,8 @@
   <div class="main-wrap">
     <tag></tag>
     <div class="container">
-      <!--tag组件中数据请求完成categoryId赋值-->
-      <router-view v-if="$store.state.categoryId!==null"></router-view>
+      <!--tag组件中数据请求完成categoryId赋值,为null显示recommand文章-->
+      <router-view></router-view>
       <div class="aside">
         <authors></authors>
       </div>

@@ -35,6 +35,7 @@ export default {
     login() {
       if (this.username == '111' && this.passpord == '222') {
         this.$store.commit('SAVE_USERINFO', { username: '111', id: '1',avatarLarge:'https://user-gold-cdn.xitu.io/2019/10/9/16daf19226ac3077' });
+        //加cookie
       }
     },
     closePanel(e) {

@@ -6,8 +6,16 @@ import articles from '@/components/articles/articles'
 import followArticles from '@/components/followArticles/followArticles'
 import boilingArticle from '@/components/boilingArticles/boilingArticles'
 import followBoiling from '@/components/followBoiling/followBoiling'
+import errorPage from '@/components/page/errorPage'
 
 Vue.use(Router)
+// export const asyncRouter = [{
+// path:'/home',
+// component:home,
+// children:[{
+
+// }]
+// }]
 
 export default new Router({
   mode: 'history',
@@ -33,21 +41,24 @@ export default new Router({
         }, {
           path: ':path',
           component: articles
-        },
+        }
       ]
     }, {
       path: '/boiling',
       component: boiling,
-      children:[{
-        path:'',
-        redirect:'recommend',
-      },{
-        path:'follow',
-        component:followBoiling
-      },{
-        path:':id',
-        component:boilingArticle
+      children: [{
+        path: '',
+        redirect: 'recommend',
+      }, {
+        path: 'follow',
+        component: followBoiling
+      }, {
+        path: ':id',
+        component: boilingArticle
       }]
+    }, {
+      path: '*',
+      component: errorPage
     }
   ]
 })
