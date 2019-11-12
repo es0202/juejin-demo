@@ -17,9 +17,7 @@
         <div class="header-info">
           <div class="author-name">{{user.username}}</div>
           <div class="author-info">
-            <div class="info">
-              {{authorInfo(user.jobTitle,user.company,user.company)}}
-            </div>
+            <div class="info">{{authorInfo(user.jobTitle,user.company,user.company)}}</div>
             <div v-if="user.jobTitle||user.company" class="dot">·</div>
             <div class="time">{{date}}</div>
           </div>
@@ -49,14 +47,14 @@
         <svg class="like-icon">
           <use xlink:href="#like2" />
         </svg>
-        <span>{{likeCount}}</span>
+        <span>{{likeCount?likeCount:'赞'}}</span>
       </div>
       <!--点过赞的才有active样式-->
       <div class="action">
         <svg class="like-icon">
           <use xlink:href="#comment2" />
         </svg>
-        <span>{{commentsCount}}</span>
+        <span>{{commentsCount?commentsCount:'评论'}}</span>
       </div>
       <div class="action">
         <svg class="like-icon">

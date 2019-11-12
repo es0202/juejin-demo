@@ -1,26 +1,17 @@
 <template>
   <div class="boiling-articles">
-    <child :date="date"></child>
     <articlePie v-for="(item,index) in articles" :key="index" v-bind="param(item)"></articlePie>
   </div>
 </template>
 <script>
 import config from '../../../config/http';
 import articlePie from '../common/articlePie';
-import mixin from '../common/mixin'
-import Vue from 'vue'
-Vue.component("child", {
-    template: "<div>child</div>",
-    inheritAttrs:false,
-    mounted(){
-      // console.log(this.$attrs)
-    }
-});
+import mixin from '../common/mixin';
 export default {
   components: {
     articlePie
   },
-  mixins:[mixin],
+  mixins: [mixin],
   data() {
     return {
       articles: [],
@@ -29,7 +20,7 @@ export default {
       endCursor: '',
       loadMore: false, //防止持续请求数据
       type: 0, //dock前三个类别
-      page: 0,
+      page: 0
     };
   },
   created() {
@@ -42,7 +33,7 @@ export default {
   mounted() {
     // this.$forceUpdate()
   },
-  updated(){
+  updated() {
     //强制刷新才可访问到$children
     // console.table(this.$children);
   },
@@ -83,14 +74,19 @@ export default {
           },
           config.param_topic
         );
-        res = await axios.get(url, { params: param });
-        if (res.data.d && res.data.d.list) {
-          if (this.page > 0) {
-            this.articles.push(...res.data.d.list);
+        try {
+          res = await axios.get(url, { params: param });
+          if (res.data.s == 1 && res.data.d && res.data.d.list) {
+            if (this.page > 0) {
+              this.articles.push(...res.data.d.list);
+            } else {
+              this.articles = res.data.d.list;
+            }
           } else {
-            this.articles = res.data.d.list;
+            window.history.go(-1);
           }
-        } else {
+        } catch (e) {
+          window.history.go(-1)
         }
       } else {
         url = '/api/query';
@@ -148,6 +144,6 @@ export default {
       }
       return { user, date, viewerHasLiked, likeCount, commentsCount, topic, content };
     }
-  },
+  }
 };
 </script>

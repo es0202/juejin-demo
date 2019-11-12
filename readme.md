@@ -115,6 +115,31 @@ webpack 升级到 4
 Cannot assign to read only property 'exports' of object '#<Object>' at Module../node_modules/webpack-dev-server/client/clients/BaseClient.js
 ```
 
+#### ExtractTextPlugin webpack4不适用
+```
+Error: Chunk.entrypoints: Use Chunks.groupsIterable and filter by instanceof Entrypoint instead
+
+npm install -D extract-text-webpack-plugin@next
+```
+
+#### ExtractTextPlugin 不能访问contenthash，使用chunkhash:8代替
+```
+Error: Path variable [contenthash] not implemented in this context: static/css/[name].[contenthash].css
+
+new ExtractTextPlugin({
+    filename: utils.assetsPath('css/[name].[chunkhash:8].css'),//contenthash改为chunkhash:8
+    allChunks: true,
+})
+```
+
+#### 单元测试问题
+```
+ERROR：babel-jest cannot read property 'cwd' of undefined
+babel-jest 23版本以下
+ERROR: Cannot read property 'fileCoverage' of undefined
+jest版本21.2以下
+```
+
 ##### 不允许在 js 中混用 module.exports 和 import ，webpack 配置的 babel-loader 模块移除条件 resolve('node_modules/webpack-dev-server/client')
 
 #### 点赞、取消点赞为 put/delete 方法，绕不过 cors 预检，只做了动态样式，没法调用掘金的接口

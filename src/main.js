@@ -5,9 +5,11 @@ import App from './App'
 import router from './router'
 import lodash from 'lodash'
 import store from './store/index'
-import ElementUI from 'element-ui'
+import {Select,Button} from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-Vue.use(ElementUI);
+//按需引入
+Vue.use(Select);
+Vue.use(Button)
 Vue.config.productionTip = false
 Vue.prototype.lodash = lodash
 //全局使用lodash 无需每个组件中Import
